@@ -1,0 +1,15 @@
+{
+  "name": "photos-library",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gm": "^1.23.0"
+  }
+}
