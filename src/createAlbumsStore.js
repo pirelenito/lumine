@@ -1,8 +1,8 @@
 const ramda = require('ramda')
 
 const getAlbumKey = ramda.compose(
-  date => date.split(' ')[0].replace(/:/gi, '-'),
-  ramda.path(['metadata', 'Properties', 'exif:DateTime'])
+  date => (date ? date.split(' ')[0].replace(/:/gi, '-') : 'no-data'),
+  ramda.path(['metadata', 'exif', 'CreateDate'])
 )
 
 module.exports = () => {

@@ -1,7 +1,7 @@
 const { create } = require('@most/create')
 const path = require('path')
 const fs = require('fs-extra')
-const gm = require('gm').subClass({ imageMagick: true })
+const ExifImage = require('exif').ExifImage
 
 module.exports = metadataBasePath => {
   fs.ensureDirSync(metadataBasePath)
@@ -22,14 +22,21 @@ module.exports = metadataBasePath => {
       fs.readFile(metadataPath, (err, data) => {
         if (!err) return publish(JSON.parse(data))
 
-        gm(photo.thumbnails.small).identify(function(err, metadata) {
-          if (err) return error(err)
+        try {
+          new ExifImage({ image: photo.thumbnails.small }, function(err, metadata = {}) {
+            if (err && err.message !== 'No Exif segment found in the given image.') {
+              return error(err)
+            }
 
-          fs.writeFile(metadataPath, JSON.stringify(metadata), err => {
-            if (err) return error(err)
-            publish(metadata)
+            fs.writeFile(metadataPath, JSON.stringify(metadata), err => {
+              if (err) return error(err)
+              // console.log(metadata)
+              publish(metadata)
+            })
           })
-        })
+        } catch (err) {
+          error(err)
+        }
       })
     })
   }
