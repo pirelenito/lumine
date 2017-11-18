@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "gm": "^1.23.0"
+    "@most/create": "^2.0.1",
+    "chokidar": "^1.7.0",
+    "gm": "^1.23.0",
+    "most": "^1.7.2"
   }
 }
