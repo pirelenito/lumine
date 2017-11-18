@@ -12,7 +12,7 @@ const config = {
 }
 
 const photos$ = watchPhotos(config.mastersPath)
-const enriched$ = mergeMapConcurrently(enrichMetadata(config.metadataPath), 4, photos$)
-const thumbnails$ = mergeMapConcurrently(generateThumbnails(config.thumbnailsPath), 4, enriched$)
+const thumbnails$ = mergeMapConcurrently(generateThumbnails(config.thumbnailsPath), 4, photos$)
+const enriched$ = mergeMapConcurrently(enrichMetadata(config.metadataPath), 4, thumbnails$)
 
-thumbnails$.observe(f => console.log(f.id))
+enriched$.observe(f => console.log(f.id))

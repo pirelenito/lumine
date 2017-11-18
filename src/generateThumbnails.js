@@ -10,7 +10,7 @@ module.exports = thumbnailBasePath => photo => {
     const publish = () => {
       add({
         ...photo,
-        thumbnails: { 25: thumbnailPath },
+        thumbnails: { small: thumbnailPath },
       })
 
       return end()

@@ -17,7 +17,7 @@ module.exports = basePath => photo => {
         return end()
       }
 
-      gm(photo.path).identify(function(err, value) {
+      gm(photo.thumbnails.small).identify(function(err, value) {
         if (err) return error(err)
 
         fs.writeFile(metadataCachePath, JSON.stringify(value), err => {
