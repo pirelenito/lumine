@@ -1,31 +1,32 @@
 const { create } = require('@most/create')
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs-extra')
 const gm = require('gm').subClass({ imageMagick: true })
 const { exec } = require('child_process')
 
-module.exports = thumbnailBasePath => photo => {
-  return create((add, end, error) => {
-    const thumbnailPath = path.join(thumbnailBasePath, `${photo.id}.jpg`)
-    const publish = () => {
-      add({
-        ...photo,
-        thumbnails: { small: thumbnailPath },
-      })
+module.exports = thumbnailBasePath => {
+  fs.ensureDirSync(thumbnailBasePath)
 
-      return end()
-    }
+  return photo => {
+    return create((add, end, error) => {
+      const thumbnailPath = path.join(thumbnailBasePath, `${photo.id}.jpg`)
+      const publish = () => {
+        add({
+          ...photo,
+          thumbnails: { small: thumbnailPath },
+        })
 
-    fs.stat(thumbnailPath, (err, data) => {
-      if (!err) {
-        publish()
+        return end()
       }
 
-      exec(`magick convert -resize 25% "${photo.path}" ${thumbnailPath}`, function(err) {
-        if (err) return error(err)
+      fs.stat(thumbnailPath, (err, data) => {
+        if (!err) return publish()
 
-        publish()
+        exec(`magick convert -resize 25% "${photo.absolutePath}" ${thumbnailPath}`, function(err) {
+          if (err) return error(err)
+          publish()
+        })
       })
     })
-  })
+  }
 }

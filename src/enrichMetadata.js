@@ -1,35 +1,36 @@
 const { create } = require('@most/create')
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs-extra')
 const gm = require('gm').subClass({ imageMagick: true })
 
-module.exports = basePath => photo => {
-  return create((add, end, error) => {
-    const metadataCachePath = path.join(basePath, photo.id)
+module.exports = metadataBasePath => {
+  fs.ensureDirSync(metadataBasePath)
 
-    fs.readFile(metadataCachePath, (err, data) => {
-      if (!err) {
+  return photo => {
+    return create((add, end, error) => {
+      const metadataPath = path.join(metadataBasePath, photo.id)
+
+      const publish = metadata => {
         add({
           ...photo,
-          identify: JSON.parse(data),
+          metadata,
         })
 
-        return end()
+        end()
       }
 
-      gm(photo.thumbnails.small).identify(function(err, value) {
-        if (err) return error(err)
+      fs.readFile(metadataPath, (err, data) => {
+        if (!err) return publish(JSON.parse(data))
 
-        fs.writeFile(metadataCachePath, JSON.stringify(value), err => {
+        gm(photo.thumbnails.small).identify(function(err, metadata) {
           if (err) return error(err)
 
-          add({
-            ...photo,
-            identify: value,
+          fs.writeFile(metadataPath, JSON.stringify(metadata), err => {
+            if (err) return error(err)
+            publish(metadata)
           })
-          end()
         })
       })
     })
-  })
+  }
 }

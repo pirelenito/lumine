@@ -15,7 +15,8 @@ module.exports = basePath => {
 
       add({
         id: hash.digest('hex'),
-        path: filePath,
+        relativePath,
+        absolutePath: filePath,
         modifiedTime: stats.mtimeMs,
         createdTime: stats.ctimeMs,
       })

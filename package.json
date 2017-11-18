@@ -12,7 +12,9 @@
   "dependencies": {
     "@most/create": "^2.0.1",
     "chokidar": "^1.7.0",
+    "fs-extra": "^4.0.2",
     "gm": "^1.23.0",
-    "most": "^1.7.2"
+    "most": "^1.7.2",
+    "ramda": "^0.25.0"
   }
 }
