@@ -15,4 +15,9 @@ const photos$ = watchPhotos(config.mastersPath)
 const thumbnails$ = mergeMapConcurrently(generateThumbnails(config.thumbnailsPath), 4, photos$)
 const enriched$ = mergeMapConcurrently(enrichMetadata(config.metadataPath), 4, thumbnails$)
 
-enriched$.observe(f => console.log(f.id))
+const createAlbumsStore = require('./createAlbumsStore')
+const albumsStore = createAlbumsStore()
+
+enriched$.observe(photo => albumsStore.update(photo))
+
+require('./service')({ albumsStore })

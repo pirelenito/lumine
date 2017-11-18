@@ -5,3 +5,5 @@ services:
     volumes:
       - .:/usr/src/app
     command: bash
+    ports:
+      - 3000:3000
