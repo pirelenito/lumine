@@ -6,13 +6,18 @@ const getAlbumKey = ramda.compose(
 )
 
 module.exports = () => {
-  let albums = {}
+  let state = {
+    albums: {},
+    all: [],
+  }
 
   return {
-    getState: () => albums,
+    getState: () => state,
     update: photo => {
-      const album = albums[getAlbumKey(photo)] || []
-      albums[getAlbumKey(photo)] = [...album, photo]
+      const album = state.albums[getAlbumKey(photo)] || []
+      state.albums[getAlbumKey(photo)] = [...album, photo]
+
+      state.all = [...state.all, photo]
     },
   }
 }
