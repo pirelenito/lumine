@@ -8,7 +8,7 @@ const getAlbumKey = ramda.compose(
 module.exports = () => {
   let state = {
     albums: {},
-    all: [],
+    photos: {},
   }
 
   return {
@@ -17,7 +17,7 @@ module.exports = () => {
       const album = state.albums[getAlbumKey(photo)] || []
       state.albums[getAlbumKey(photo)] = [...album, photo]
 
-      state.all = [...state.all, photo]
+      state.photos = { ...state.photos, [photo.id]: photo }
     },
   }
 }
