@@ -1,4 +1,4 @@
-FROM node:9.2.0-onbuild
+FROM node:9.2.0
 
 # ImageMagick installation adapted from:
 # - https://hub.docker.com/r/starefossen/node-imagemagick/~/dockerfile/
@@ -37,3 +37,14 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 8277377A \
   && apt-get -y autoclean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+ARG NODE_ENV
+ENV NODE_ENV $NODE_ENV
+COPY package.json /usr/src/app/
+RUN npm install && npm cache clean --force
+COPY . /usr/src/app
+
+CMD [ "npm", "start" ]
