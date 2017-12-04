@@ -3,7 +3,7 @@ const mergeMapConcurrently = require('most/lib/combinator/mergeConcurrently').me
 
 const watchPhotos = require('./watchPhotos')
 const enrichMetadata = require('./enrichMetadata')
-const generateThumbnails = require('./generateThumbnails')
+const generateThumbnail = require('./generateThumbnail')
 
 const config = {
   mastersPath: path.join(__dirname, '../library/masters'),
@@ -12,8 +12,17 @@ const config = {
 }
 
 const photos$ = watchPhotos(config.mastersPath)
-const thumbnails$ = mergeMapConcurrently(generateThumbnails(config.thumbnailsPath), 4, photos$)
-const enriched$ = mergeMapConcurrently(enrichMetadata(config.metadataPath), 4, thumbnails$)
+const thumbnailSmall$ = mergeMapConcurrently(
+  generateThumbnail(config.thumbnailsPath, 'small'),
+  4,
+  photos$
+)
+const thumbnailPreview$ = mergeMapConcurrently(
+  generateThumbnail(config.thumbnailsPath, 'preview'),
+  4,
+  thumbnailSmall$
+)
+const enriched$ = mergeMapConcurrently(enrichMetadata(config.metadataPath), 4, thumbnailPreview$)
 
 const createAlbumsStore = require('./createAlbumsStore')
 const albumsStore = createAlbumsStore()

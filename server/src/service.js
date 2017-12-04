@@ -25,11 +25,11 @@ module.exports = ({ albumsStore }) => {
     res.json(photo)
   })
 
-  app.get('/photos/:id/thumbnails/small.jpg', (req, res) => {
+  app.get('/photos/:id/thumbnails/:size.jpg', (req, res) => {
     const photo = albumsStore.getState().photos[req.params.id]
 
     if (!photo) res.sendStatus(404)
-    res.sendFile(photo.thumbnails.small)
+    res.sendFile(photo.thumbnails[req.params.size])
   })
 
   app.listen(3001, () => console.log('Listening on port 3001!'))
