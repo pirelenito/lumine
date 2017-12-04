@@ -3,11 +3,9 @@ const app = express()
 
 module.exports = ({ albumsStore }) => {
   app.get('/albums', (req, res) => {
-    const state = albumsStore.getState()
-
     res.json({
-      librarySize: Object.keys(state.photos).length,
-      albums: Object.keys(state.albums),
+      librarySize: albumsStore.getLibrarySize(),
+      albums: albumsStore.getAlbumsList(),
     })
   })
 
