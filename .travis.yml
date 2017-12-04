@@ -2,6 +2,12 @@ sudo: required
 
 language: node_js
 
+# force update to latest Docker
+addons:
+  apt:
+    packages:
+      - docker-ce
+
 node_js:
   - "9.2"
 
