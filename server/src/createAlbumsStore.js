@@ -32,6 +32,7 @@ module.exports = () => {
     },
     getLibrarySize: () => Object.keys(state.photos).length,
     update: photo => {
+      console.log('update', photo.id)
       updateAlbums(photo)
       updatePhotos(photo)
     },

@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const app = express()
 
@@ -30,5 +31,7 @@ module.exports = ({ albumsStore }) => {
     res.sendFile(photo.thumbnails[req.params.size])
   })
 
-  app.listen(3001, () => console.log('Listening on port 3001!'))
+  app.use(express.static(path.join(__dirname, '../../client/dist')))
+
+  app.listen(80, () => console.log('Listening on port 80'))
 }

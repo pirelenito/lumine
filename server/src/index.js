@@ -6,9 +6,9 @@ const enrichMetadata = require('./enrichMetadata')
 const generateThumbnail = require('./generateThumbnail')
 
 const config = {
-  mastersPath: path.join(__dirname, '../library/masters'),
-  metadataPath: path.join(__dirname, '../library/metadata'),
-  thumbnailsPath: path.join(__dirname, '../library/thumbnails'),
+  mastersPath: '/data/masters',
+  metadataPath: '/data/cache/metadata',
+  thumbnailsPath: '/data/cache/thumbnails',
 }
 
 const photos$ = watchPhotos(config.mastersPath)

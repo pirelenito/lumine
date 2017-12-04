@@ -1,0 +1,12 @@
+version: '3'
+services:
+  service:
+    build: .
+    volumes:
+      - ./server:/usr/src/app/server
+      - ./client:/usr/src/app/client
+      - ./test-data/masters:/data/masters
+      - ./test-data/cache:/data/cache
+    command: npm start
+    ports:
+      - 80:80
