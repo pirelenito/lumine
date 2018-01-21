@@ -1,6 +1,7 @@
 const calculateHash = require('./calculateHash')
 const convertResource = require('./convertResource')
-const loadMetadata = require('./loadMetadata')
+const loadExifMetadata = require('./loadExifMetadata')
+const loadFileMetadata = require('./loadFileMetadata')
 const fromCache = require('./fromCache')
 
 module.exports = cacheFolder => async sourcePath => {
@@ -10,7 +11,8 @@ module.exports = cacheFolder => async sourcePath => {
     createMedia(hash, sourcePath)
       .then(convertResource(cacheFolder, 'preview'))
       .then(convertResource(cacheFolder, 'thumbnail'))
-      .then(loadMetadata)
+      .then(loadExifMetadata)
+      .then(loadFileMetadata)
   )
 }
 

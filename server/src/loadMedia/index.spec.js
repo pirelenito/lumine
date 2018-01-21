@@ -59,6 +59,11 @@ it('load a RAW photo', async () => {
         SubfileType: 1,
         YCbCrPositioning: 2,
       },
+      file: {
+        ctimeMs: 1516530993000,
+        mtimeMs: 1482182844000,
+        size: 25034752,
+      },
     },
     resources: {
       preview: path.join(
