@@ -4,11 +4,48 @@ const promisify = require('util').promisify
 const mkdirTemp = promisify(temp.mkdir)
 const loadMedia = require('.')
 
-it('load a RAW photo', async () => {
+it('loads a JPEG photo with no exif', async () => {
   jest.setTimeout(30000)
 
   const cacheFolder = await mkdirTemp('lumine')
-  const source = path.join(__dirname, '../../spec/fixtures/DSC02482.ARW')
+  const source = path.join(__dirname, '../../spec/fixtures/jpeg-without-exif.jpg')
+
+  const media = await loadMedia(cacheFolder)(source)
+  expect(media).toEqual({
+    id: 'df6079cf7c5a81151a38b9c013be6424623f987c',
+    metadata: {
+      exif: {},
+      gps: {},
+      image: {},
+      file: {
+        ctimeMs: 1516545773000,
+        mtimeMs: 1516545771000,
+        size: 48985,
+      },
+    },
+    resources: {
+      preview: path.join(
+        cacheFolder,
+        'preview',
+        'df',
+        '6079cf7c5a81151a38b9c013be6424623f987c.jpg'
+      ),
+      source: '/usr/src/app/server/spec/fixtures/jpeg-without-exif.jpg',
+      thumbnail: path.join(
+        cacheFolder,
+        'thumbnail',
+        'df',
+        '6079cf7c5a81151a38b9c013be6424623f987c.jpg'
+      ),
+    },
+  })
+})
+
+it('loads a RAW photo', async () => {
+  jest.setTimeout(30000)
+
+  const cacheFolder = await mkdirTemp('lumine')
+  const source = path.join(__dirname, '../../spec/fixtures/raw-with-exif.arw')
 
   const media = await loadMedia(cacheFolder)(source)
   expect(media).toEqual({
@@ -72,7 +109,7 @@ it('load a RAW photo', async () => {
         '4b',
         'ff511b810cba0590e0d787232e9bda2deb4039.jpg'
       ),
-      source: '/usr/src/app/server/spec/fixtures/DSC02482.ARW',
+      source: '/usr/src/app/server/spec/fixtures/raw-with-exif.arw',
       thumbnail: path.join(
         cacheFolder,
         'thumbnail',
