@@ -1,5 +1,6 @@
 const path = require('path')
 const temp = require('temp')
+const fs = require('fs')
 const promisify = require('util').promisify
 const mkdirTemp = promisify(temp.mkdir)
 const loadMedia = require('.')
@@ -9,6 +10,7 @@ it('loads a JPEG photo with no exif', async () => {
 
   const cacheFolder = await mkdirTemp('lumine')
   const source = path.join(__dirname, '../../spec/fixtures/jpeg-without-exif.jpg')
+  const stat = fs.statSync(source)
 
   const media = await loadMedia(cacheFolder)(source)
   expect(media).toEqual({
@@ -18,9 +20,9 @@ it('loads a JPEG photo with no exif', async () => {
       gps: {},
       image: {},
       file: {
-        ctimeMs: 1516545773000,
-        mtimeMs: 1516545771000,
-        size: 48985,
+        ctimeMs: stat.ctimeMs,
+        mtimeMs: stat.mtimeMs,
+        size: stat.size,
       },
     },
     resources: {
@@ -46,6 +48,7 @@ it('loads a RAW photo', async () => {
 
   const cacheFolder = await mkdirTemp('lumine')
   const source = path.join(__dirname, '../../spec/fixtures/raw-with-exif.arw')
+  const stat = fs.statSync(source)
 
   const media = await loadMedia(cacheFolder)(source)
   expect(media).toEqual({
@@ -97,9 +100,9 @@ it('loads a RAW photo', async () => {
         YCbCrPositioning: 2,
       },
       file: {
-        ctimeMs: 1516530993000,
-        mtimeMs: 1482182844000,
-        size: 25034752,
+        ctimeMs: stat.ctimeMs,
+        mtimeMs: stat.mtimeMs,
+        size: stat.size,
       },
     },
     resources: {
