@@ -18,6 +18,8 @@ before_install:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 
 script:
+  - cd client && npm intall && npm test
+  - cd server && npm intall && npm test
   - docker build -t pirelenito/lumine:latest .
 
 after_success:
