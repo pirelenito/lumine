@@ -30,7 +30,6 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 8277377A \
   && curl -SLO "${MAGICK_URL}/ImageMagick-${MAGICK_VERSION}.tar.xz.asc" \
   && gpg --verify "ImageMagick-${MAGICK_VERSION}.tar.xz.asc" "ImageMagick-${MAGICK_VERSION}.tar.xz" \
   && tar xf "ImageMagick-${MAGICK_VERSION}.tar.xz" \
-
   && cd "ImageMagick-${MAGICK_VERSION}" \
   && ./configure \
     --disable-static \
@@ -42,11 +41,9 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 8277377A \
     --with-tiff \
     --with-quantum-depth=8 \
     --without-x \
-
   && make \
   && make install \
   && ldconfig /usr/local/lib \
-
   && apt-get -y autoclean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
