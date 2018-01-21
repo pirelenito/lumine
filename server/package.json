@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watchAll",
     "start": "node src/index.js"
   },
   "keywords": [],
@@ -18,5 +20,9 @@
     "gm": "^1.23.0",
     "most": "^1.7.2",
     "ramda": "^0.25.0"
+  },
+  "devDependencies": {
+    "jest": "^22.1.4",
+    "temp": "^0.8.3"
   }
 }
