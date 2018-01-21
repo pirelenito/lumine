@@ -1,32 +1,25 @@
 const path = require('path')
+const fromPromise = require('most').fromPromise
 const mergeMapConcurrently = require('most/lib/combinator/mergeConcurrently').mergeMapConcurrently
 
-const watchPhotos = require('./watchPhotos')
-const enrichMetadata = require('./enrichMetadata')
-const generateThumbnail = require('./generateThumbnail')
+const watchFiles = require('./watchFiles')
+const loadMedia = require('./loadMedia')
+const store = require('./store')
+const service = require('./service')
 
 const config = {
-  mastersPath: '/data/masters',
-  metadataPath: '/data/cache/metadata',
-  thumbnailsPath: '/data/cache/thumbnails',
+  mastersFolder: '/data/masters',
+  cacheFolder: '/data/cache',
 }
 
-const photos$ = watchPhotos(config.mastersPath)
-const thumbnailSmall$ = mergeMapConcurrently(
-  generateThumbnail(config.thumbnailsPath, 'small'),
+const file$ = watchFiles(config.mastersFolder)
+
+const media$ = mergeMapConcurrently(
+  file => fromPromise(loadMedia(config.cacheFolder)(file.filePath)),
   4,
-  photos$
+  file$
 )
-const thumbnailPreview$ = mergeMapConcurrently(
-  generateThumbnail(config.thumbnailsPath, 'preview'),
-  4,
-  thumbnailSmall$
-)
-const enriched$ = mergeMapConcurrently(enrichMetadata(config.metadataPath), 4, thumbnailPreview$)
 
-const createAlbumsStore = require('./createAlbumsStore')
-const albumsStore = createAlbumsStore()
+const state$ = media$.scan(store)
 
-enriched$.observe(photo => albumsStore.update(photo))
-
-require('./service')({ albumsStore })
+service(state$)

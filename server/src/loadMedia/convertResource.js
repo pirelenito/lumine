@@ -11,7 +11,7 @@ const presets = {
 module.exports = (cacheFolder, preset) => async media => {
   const source = media.resources.preview || media.resources.source
   const targetPath = await ensureCacheResource(cacheFolder, preset, media.id, 'jpg')
-  await exec(`magick convert ${presets[preset]} "${source}" ${targetPath}`)
+  await exec(`magick convert ${presets[preset]} "${source}" "${targetPath}"`)
 
   return {
     ...media,
