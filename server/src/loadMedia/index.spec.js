@@ -7,7 +7,7 @@ const loadMedia = require('.')
 it('load a RAW photo', async () => {
   jest.setTimeout(30000)
 
-  const cacheFolder = await mkdirTemp('testing')
+  const cacheFolder = await mkdirTemp('lumine')
   const source = path.join(__dirname, '../../spec/fixtures/DSC02482.ARW')
 
   const media = await loadMedia(cacheFolder)(source)
