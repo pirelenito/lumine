@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`enriches a RAW photo 1`] = `
+exports[`load a RAW photo 1`] = `
 Object {
   "id": "4bff511b810cba0590e0d787232e9bda2deb4039",
   "metadata": Object {
@@ -51,9 +51,9 @@ Object {
     },
   },
   "resources": Object {
-    "preview": "/tmp/testing118021-906-5iz7id.pf38t/preview/4b/ff511b810cba0590e0d787232e9bda2deb4039.jpg",
+    "preview": "/tmp/testing118021-1110-s2ny1k.zbfpp/preview/4b/ff511b810cba0590e0d787232e9bda2deb4039.jpg",
     "source": "/usr/src/app/server/spec/fixtures/DSC02482.ARW",
-    "thumbnail": "/tmp/testing118021-906-5iz7id.pf38t/thumbnail/4b/ff511b810cba0590e0d787232e9bda2deb4039.jpg",
+    "thumbnail": "/tmp/testing118021-1110-s2ny1k.zbfpp/thumbnail/4b/ff511b810cba0590e0d787232e9bda2deb4039.jpg",
   },
 }
 `;
