@@ -4,8 +4,8 @@ const exec = promisify(require('child_process').exec)
 const ensureCacheResource = require('./ensureCacheResource')
 
 const presets = {
-  thumbnail: '-resize 200x200^ -gravity center -extent 200x200',
-  preview: '-resize 1200x800',
+  thumbnail: '-size 200x200 -thumbnail 200x200^ -gravity center -extent 200x200 +profile "*"',
+  preview: '-resize 1920x1080\\>',
 }
 
 module.exports = (cacheFolder, preset) => async media => {

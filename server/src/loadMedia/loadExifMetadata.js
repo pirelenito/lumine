@@ -7,7 +7,7 @@ module.exports = media =>
   new Promise((resolve, reject) => {
     try {
       new ExifImage(
-        { image: media.resources.thumbnail || media.resources.preview || media.resources.source },
+        { image: media.resources.preview || media.resources.source },
         (err, metadata = { image: {}, exif: {}, gps: {} }) => {
           if (err && err.message !== 'No Exif segment found in the given image.') {
             return reject(err)
