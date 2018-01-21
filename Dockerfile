@@ -18,7 +18,7 @@ FROM node:9.2.0
 # - http://www.imagemagick.org/script/advanced-unix-installation.php#configure
 
 ENV MAGICK_URL "http://imagemagick.org/download/releases"
-ENV MAGICK_VERSION 7.0.7-13
+ENV MAGICK_VERSION 7.0.7-21
 
 RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 8277377A \
   && apt-get update -y \
