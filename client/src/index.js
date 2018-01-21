@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import axios from 'axios'
 
-const PhotoThumbnail = ({ onClick, id }) => (
+const MediaThumbnail = ({ onClick, id }) => (
   <img
     style={{
       margin: 15,
@@ -12,7 +12,7 @@ const PhotoThumbnail = ({ onClick, id }) => (
       cursor: 'pointer',
     }}
     onClick={onClick}
-    src={`/photos/${id}/thumbnails/small.jpg`}
+    src={`/media/${id}/preview.jpg`}
   />
 )
 
@@ -20,41 +20,35 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      albumsIndex: [],
-      albums: {},
+      albums: [],
       selectedAlbumId: null,
     }
   }
 
   componentDidMount() {
     axios.get('/albums').then(response => {
-      this.setState({ albumsIndex: response.data.albums })
+      this.setState({ albums: response.data.albums })
     })
   }
 
   render() {
+    const selectedAlbum =
+      this.state.selectedAlbumId &&
+      this.state.albums.find(album => album.id === this.state.selectedAlbumId)
+
     return (
       <div style={{ padding: 15 }}>
-        {this.state.selectedAlbumId &&
-          this.state.albums[this.state.selectedAlbumId] &&
-          this.state.albums[this.state.selectedAlbumId].map(photo => (
-            <PhotoThumbnail key={photo.id} id={photo.id} />
-          ))}
-
-        {!this.state.selectedAlbumId &&
-          this.state.albumsIndex.map(album => (
-            <PhotoThumbnail
-              id={album.coverPhotoId}
-              key={album.coverPhotoId}
-              onClick={() => {
-                this.setState({ selectedAlbumId: album.id })
-
-                axios.get(`/albums/${album.id}`).then(response => {
-                  this.setState({ albums: { ...this.state.albums, [album.id]: response.data } })
-                })
-              }}
-            />
-          ))}
+        {selectedAlbum
+          ? selectedAlbum.medias.map(media => <MediaThumbnail key={media.id} id={media} />)
+          : this.state.albums.map(album => (
+              <MediaThumbnail
+                key={album.id}
+                id={album.medias[0]}
+                onClick={() => {
+                  this.setState({ selectedAlbumId: album.id })
+                }}
+              />
+            ))}
       </div>
     )
   }

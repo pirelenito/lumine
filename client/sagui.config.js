@@ -7,11 +7,11 @@ module.exports = {
   develop: {
     proxy: {
       '/albums': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:80',
         secure: false,
       },
-      '/photos': {
-        target: 'http://localhost:3001',
+      '/media': {
+        target: 'http://localhost:80',
         secure: false,
       },
     },
