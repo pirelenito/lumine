@@ -1,4 +1,4 @@
-const mediaSelectors = require('../mediaSelectors')
+const mediaSelectors = require('./mediaSelectors')
 
 module.exports = (albums = {}, media) => {
   const key = mediaSelectors.getDayKey(media)
