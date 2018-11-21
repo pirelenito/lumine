@@ -2,16 +2,20 @@ export default interface Photo {
   relativePath: string
   contentHash: string
 
-  // preview: {
-  //   thumbnailPath: string
-  //   fullsizePath: string
-  // }
+  preview: Preview
 
-  // metadata: {
-  //   file: {
-  //     ctimeMs: number
-  //     mtimeMs: number
-  //     size: number
-  //   }
-  // }
+  metadata: {
+    file: FileMetadata
+  }
+}
+
+export interface FileMetadata {
+  createdAt: number
+  modifiedAt: number
+  size: number
+}
+
+export interface Preview {
+  thumbnailPath: string
+  fullSizePath: string
 }
