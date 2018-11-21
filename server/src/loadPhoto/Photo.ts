@@ -6,6 +6,7 @@ export default interface Photo {
 
   metadata: {
     file: FileMetadata
+    exif: ExifMetadata
   }
 }
 
@@ -13,6 +14,12 @@ export interface FileMetadata {
   createdAt: number
   modifiedAt: number
   size: number
+}
+
+export interface ExifMetadata {
+  exif: any
+  image: any
+  gps: any
 }
 
 export interface Preview {
