@@ -7,8 +7,12 @@ export default async (fullPath: string): Promise<FileMetadata> => {
   const fileStat = await stat(fullPath)
 
   return {
-    createdAt: Math.floor(fileStat.ctimeMs / 1000),
-    modifiedAt: Math.floor(fileStat.mtimeMs / 1000),
+    // birthtime can be null on some filesystems
+    // which makes node return something else that might be wrong
+    createdAt: convertToDate(fileStat.birthtimeMs > fileStat.mtimeMs ? fileStat.mtimeMs : fileStat.birthtimeMs),
+    modifiedAt: convertToDate(fileStat.mtimeMs),
     size: fileStat.size,
   }
 }
+
+const convertToDate = (timeMs: number) => new Date(Math.floor(timeMs / 1000) * 1000)

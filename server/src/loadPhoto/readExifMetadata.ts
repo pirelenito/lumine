@@ -1,8 +1,9 @@
 import { pickBy, type, contains } from 'ramda'
 import { ExifImage } from 'exif'
 import { ExifMetadata } from './Photo'
+import parseExifDate from './parseExifDate'
 
-const onlyNumbersAndStrings = pickBy((val, key) => contains(type(val), ['Number', 'String']))
+const onlyNumbersAndStrings = pickBy(val => contains(type(val), ['Number', 'String']))
 
 export default (fullPath: string): Promise<ExifMetadata> =>
   new Promise((resolve, reject) => {
@@ -12,13 +13,17 @@ export default (fullPath: string): Promise<ExifMetadata> =>
           return reject(err)
         }
 
-        const rawMetadata = {
-          image: onlyNumbersAndStrings(metadata.image),
-          exif: onlyNumbersAndStrings(metadata.exif),
-          gps: onlyNumbersAndStrings(metadata.gps),
-        }
+        const image = onlyNumbersAndStrings(metadata.image)
+        const exif = onlyNumbersAndStrings(metadata.exif)
+        const gps = onlyNumbersAndStrings(metadata.gps)
+        const createdAt = parseExifDate((exif as { CreateDate: string }).CreateDate)
 
-        resolve(rawMetadata)
+        resolve({
+          image,
+          exif,
+          gps,
+          dates: { createdAt },
+        })
       })
     } catch (e) {
       reject(e)

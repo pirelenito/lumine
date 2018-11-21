@@ -5,6 +5,9 @@ Object {
   "contentHash": "98ce370e686f5a40a02523058679a06ca3ff4ce2",
   "metadata": Object {
     "exif": Object {
+      "dates": Object {
+        "createdAt": 2018-08-14T14:09:14.000Z,
+      },
       "exif": Object {
         "BrightnessValue": 8.946875,
         "ColorSpace": 1,
@@ -52,8 +55,8 @@ Object {
       },
     },
     "file": Object {
-      "createdAt": 1542836886,
-      "modifiedAt": 1534248554,
+      "createdAt": 2018-08-14T12:09:14.000Z,
+      "modifiedAt": 2018-08-14T12:09:14.000Z,
       "size": 25133056,
     },
   },
@@ -70,6 +73,9 @@ Object {
   "contentHash": "e56e56185e42ac9569b4d811adb5cd495fbcebec",
   "metadata": Object {
     "exif": Object {
+      "dates": Object {
+        "createdAt": 2018-08-09T18:06:30.000Z,
+      },
       "exif": Object {
         "ApertureValue": 2.2750071245369052,
         "BrightnessValue": 11.340301003344482,
@@ -112,8 +118,8 @@ Object {
       },
     },
     "file": Object {
-      "createdAt": 1542836883,
-      "modifiedAt": 1533830790,
+      "createdAt": 2018-08-09T16:06:30.000Z,
+      "modifiedAt": 2018-08-09T16:06:30.000Z,
       "size": 993124,
     },
   },
@@ -130,6 +136,9 @@ Object {
   "contentHash": "da1fb28e2764fcd4edc27c4c65167a1349c9b802",
   "metadata": Object {
     "exif": Object {
+      "dates": Object {
+        "createdAt": 2018-11-08T12:41:58.000Z,
+      },
       "exif": Object {
         "ApertureValue": 2,
         "BrightnessValue": 0.3,
@@ -174,8 +183,8 @@ Object {
       },
     },
     "file": Object {
-      "createdAt": 1542836846,
-      "modifiedAt": 1542836831,
+      "createdAt": 2018-11-21T21:47:11.000Z,
+      "modifiedAt": 2018-11-21T21:47:11.000Z,
       "size": 2273365,
     },
   },

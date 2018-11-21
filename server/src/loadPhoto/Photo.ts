@@ -11,12 +11,15 @@ export default interface Photo {
 }
 
 export interface FileMetadata {
-  createdAt: number
-  modifiedAt: number
-  size: number
+  createdAt: Date
+  modifiedAt: Date
+  size: Date
 }
 
 export interface ExifMetadata {
+  dates: {
+    createdAt: Date
+  }
   exif: any
   image: any
   gps: any
