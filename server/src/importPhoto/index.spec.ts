@@ -6,7 +6,7 @@ import loadPhoto from '.'
 
 const libraryBasePath = join(__dirname, '../../fixtures')
 const cacheBasePath = join(__dirname, '../../tmp')
-const config = { libraryBasePath, cacheBasePath }
+const config = { libraryBasePath, cacheBasePath, httpPort: 80 }
 
 beforeAll(() => rimraf.sync(cacheBasePath))
 
