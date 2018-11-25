@@ -9,10 +9,10 @@ export default async (fullPath: string): Promise<FileMetadata> => {
   return {
     // birthtime can be null on some filesystems
     // which makes node return something else that might be wrong
-    createdAt: convertToDate(fileStat.birthtimeMs > fileStat.mtimeMs ? fileStat.mtimeMs : fileStat.birthtimeMs),
-    modifiedAt: convertToDate(fileStat.mtimeMs),
+    createdAt: reduceResolution(fileStat.birthtimeMs > fileStat.mtimeMs ? fileStat.mtimeMs : fileStat.birthtimeMs),
+    modifiedAt: reduceResolution(fileStat.mtimeMs),
     size: fileStat.size,
   }
 }
 
-const convertToDate = (timeMs: number) => new Date(Math.floor(timeMs / 1000) * 1000)
+const reduceResolution = (timeMs: number) => Math.floor(timeMs / 1000) * 1000

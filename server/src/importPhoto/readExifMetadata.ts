@@ -22,7 +22,7 @@ export default (fullPath: string): Promise<ExifMetadata> =>
           image,
           exif,
           gps,
-          dates: { createdAt },
+          dates: { createdAt: createdAt.getTime() },
         })
       })
     } catch (e) {
