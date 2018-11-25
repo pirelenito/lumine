@@ -4,7 +4,7 @@ import { ensureDir } from 'fs-extra'
 
 const promisifiedEnsureDir = promisify(ensureDir)
 
-export default async function ensureCachePathExists(
+export async function ensureCachePathExists(
   cacheFolder: string,
   namespace: string,
   id: string,

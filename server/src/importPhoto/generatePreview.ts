@@ -1,7 +1,7 @@
 import { Preview } from './Photo'
 import { promisify } from 'util'
 import { exec } from 'child_process'
-import ensureCachePathExists from './ensureCachePathExists'
+import { ensureCachePathExists } from '../cache'
 import { relative } from 'path'
 
 const promisifiedExec = promisify(exec)
