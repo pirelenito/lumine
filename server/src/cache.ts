@@ -12,6 +12,6 @@ export async function ensureCachePathExists(
 ): Promise<string> {
   const dir = join(cacheFolder, namespace, id.slice(0, 2))
   const resourcePath = join(dir, `${id.slice(2)}.${fileExtension}`)
-  await ensureDir(dir)
+  await promisifiedEnsureDir(dir)
   return resourcePath
 }

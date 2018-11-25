@@ -9,12 +9,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@most/create": "^2.0.1",
+    "@types/chokidar": "^1.7.5",
     "@types/fs-extra": "^5.0.4",
     "@types/node": "^10.12.10",
     "@types/ramda": "^0.25.42",
+    "chokidar": "^2.0.4",
     "date-fns": "^1.29.0",
     "exif": "^0.6.0",
     "fs-extra": "^7.0.1",
+    "most": "^1.0.1",
     "ramda": "^0.26.0",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.6"

@@ -4,11 +4,7 @@ import generatePreview from './generatePreview'
 import calculateContentHash from './calculateContentHash'
 import readFileMetadata from './readFileMetadata'
 import readExifMetadata from './readExifMetadata'
-
-interface Config {
-  libraryBasePath: string
-  cacheBasePath: string
-}
+import { Config } from '../Config'
 
 export default (config: Config) => async (relativePath: string): Promise<Photo> => {
   const fullPath = join(config.libraryBasePath, relativePath)
