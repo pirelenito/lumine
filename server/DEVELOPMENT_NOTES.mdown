@@ -1,0 +1,20 @@
+## Benchmarking listing all files
+
+For my pictures:
+
+```
+> const path = require('path')
+undefined
+> const before = Date.now()
+undefined
+> const files = require('glob').sync('/pics/**/*.@(ARW|jpg|jpeg|avi|mpeg)', { nocase: true }).length
+undefined
+> const after = Date.now()
+undefined
+> console.log(after - before, files)
+19647 63559
+undefined
+>
+```
+
+20seconds for 63k files, not bad at all
