@@ -1,9 +1,12 @@
 import loadPhoto from '.'
 import { join } from 'path'
+import rimraf from 'rimraf'
 
 const libraryBasePath = join(__dirname, '../../fixtures')
 const cacheBasePath = join(__dirname, '../../tmp')
 const config = { libraryBasePath, cacheBasePath }
+
+beforeEach(() => rimraf.sync(cacheBasePath))
 
 it('loads a6000', async () => {
   const photo = await loadPhoto(config)('a6000.ARW')

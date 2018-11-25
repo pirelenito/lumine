@@ -12,8 +12,6 @@ function watchFiles(basePath: string) {
 
     watcher.on('add', fullPath => {
       const filePath = path.relative(basePath, fullPath)
-      console.log(fullPath, filePath)
-
       if (!filePath.match(/\.(arw|jpg|jpeg|)$/i)) return
       add(filePath)
     })
