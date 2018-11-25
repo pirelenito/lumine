@@ -1,4 +1,4 @@
-import { FileMetadata } from './Photo'
+import { FileMetadata } from '../Photo'
 
 const promisify = require('util').promisify
 const stat = promisify(require('fs').stat)

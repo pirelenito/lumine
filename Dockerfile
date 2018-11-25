@@ -60,12 +60,12 @@ COPY server /usr/src/app/server
 
 # COPY --from=client /usr/src/app/client/dist /usr/src/app/client/dist
 
-# EXPOSE 80
+EXPOSE 80
 
-# # read-only folder containing all the photos
-# VOLUME /data/masters
+# read-only folder containing all the photos
+VOLUME /data/masters
 
-# # writeable directory used to store cached assets
-# VOLUME /data/cache
+# writeable directory used to store cached assets
+VOLUME /data/cache
 
-# CMD [ "yarn", "start" ]
+CMD [ "yarn", "start" ]

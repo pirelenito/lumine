@@ -1,14 +1,19 @@
 import watch from './watch'
-import { join } from 'path'
 
-const libraryBasePath = join(__dirname, '../fixtures')
-const cacheBasePath = join(__dirname, '../tmp')
+import Library from './Library'
+import startHttpServer from './startHttpServer'
 
-console.log('Starting watcher')
+const config = {
+  libraryBasePath: '/data/masters',
+  cacheBasePath: '/data/cache',
+  httpPort: 80,
+}
 
-watch({ libraryBasePath, cacheBasePath })
-  .observe(photo => console.log('photo', photo))
+const library = new Library()
+
+watch(config)
+  .observe(photo => library.addPhoto(photo))
   .then(success => console.log('completed', success))
   .catch(error => console.log('error', error))
 
-console.log('Watcher started')
+startHttpServer(config)(library)

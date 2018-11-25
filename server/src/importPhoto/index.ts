@@ -1,4 +1,4 @@
-import Photo from './Photo'
+import Photo from '../Photo'
 import { join } from 'path'
 import generatePreview from './generatePreview'
 import calculateContentHash from './calculateContentHash'

@@ -1,6 +1,6 @@
 import { pickBy, type, contains } from 'ramda'
 import { ExifImage } from 'exif'
-import { ExifMetadata } from './Photo'
+import { ExifMetadata } from '../Photo'
 import parseExifDate from './parseExifDate'
 
 const onlyNumbersAndStrings = pickBy(val => contains(type(val), ['Number', 'String']))

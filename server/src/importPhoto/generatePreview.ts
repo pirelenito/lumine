@@ -1,4 +1,4 @@
-import { Preview } from './Photo'
+import { Preview } from '../Photo'
 import { promisify } from 'util'
 import { exec } from 'child_process'
 import { ensureCachePathExists } from '../cache'
