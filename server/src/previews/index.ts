@@ -17,12 +17,11 @@ export const getExif = (config: Config) => async (contentHash: string, relativeP
 export const getThumbnail = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
-  const previewPath = await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg')
-  await promisifiedExec(
-    `magick convert -size 200x200 -thumbnail 200x200^ -gravity center -extent 200x200 +profile "*" "${fullPath}" "${previewPath}"`,
-  )
-
-  return previewPath
+  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async cachePath => {
+    await promisifiedExec(
+      `magick convert -size 200x200 -thumbnail 200x200^ -gravity center -extent 200x200 +profile "*" "${fullPath}" "${cachePath}"`,
+    )
+  })
 }
 
 export const getFullSize = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
@@ -30,10 +29,9 @@ export const getFullSize = (config: Config) => async (contentHash: string, relat
 
   if (!isRaw(relativePath)) return fullPath
 
-  const previewPath = await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg')
-  await promisifiedExec(`magick convert -resize 1920x1080\\> "${fullPath}" "${previewPath}"`)
-
-  return previewPath
+  return await ensureCachePathExists(config.cacheBasePath, '1080p', contentHash, 'jpg', async cachePath => {
+    await promisifiedExec(`magick convert -resize 1920x1080\\> "${fullPath}" "${cachePath}"`)
+  })
 }
 
 const isRaw = (filename: string) => !filename.match(/\.(jpg|jpeg|png)$/i)
