@@ -13,4 +13,8 @@ export default class Library {
   getPhotos() {
     return this.photos
   }
+
+  getPhotoByContentHash(contentHash: string) {
+    return this.photos.find(photo => photo.contentHash === contentHash)
+  }
 }

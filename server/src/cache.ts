@@ -1,8 +1,5 @@
 import { join } from 'path'
-import { promisify } from 'util'
 import { ensureDir, readFile, writeFile } from 'fs-extra'
-
-const promisifiedEnsureDir = promisify(ensureDir)
 
 export async function ensureCachePathExists(
   cacheFolder: string,
@@ -12,7 +9,7 @@ export async function ensureCachePathExists(
 ): Promise<string> {
   const dir = join(cacheFolder, namespace, id.slice(0, 2))
   const resourcePath = join(dir, `${id.slice(2)}.${fileExtension}`)
-  await promisifiedEnsureDir(dir)
+  await ensureDir(dir)
   return resourcePath
 }
 
@@ -35,7 +32,7 @@ export async function loadOrWriteCache<T>(
     const object = JSON.parse(buffer.toString())
     return object
   } catch (e) {
-    ensureCachePathExists(cacheFolder, namespace, id, fileExtension)
+    await ensureCachePathExists(cacheFolder, namespace, id, fileExtension)
     const data = await operation()
     await writeFile(resourcePath, JSON.stringify(data))
     return data as T

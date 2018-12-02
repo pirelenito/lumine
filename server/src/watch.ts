@@ -1,7 +1,7 @@
 import { create } from '@most/create'
 import path from 'path'
 import glob from 'glob'
-import { Config } from './Config'
+import Config from './Config'
 import { fromPromise } from 'most'
 import importPhoto from './importPhoto'
 
