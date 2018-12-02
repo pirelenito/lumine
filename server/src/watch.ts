@@ -1,24 +1,28 @@
 import { create } from '@most/create'
 import path from 'path'
-import chokidar from 'chokidar'
+import glob from 'glob'
 import { Config } from './Config'
 import { fromPromise } from 'most'
 import importPhoto from './importPhoto'
 
 function watchFiles(basePath: string) {
   const newFiles$ = create<string>((add, end, error) => {
-    const pattern = path.join(basePath, '/**/*')
-    const watcher = chokidar.watch(pattern)
+    const cwd = path.join(basePath)
+    const pattern = '**/*.{arw,jpg,jpeg}'
 
-    watcher.on('add', fullPath => {
-      const filePath = path.relative(basePath, fullPath)
-      if (!filePath.match(/\.(arw|jpg|jpeg|)$/i)) return
-      add(filePath)
+    glob(pattern, { nocase: true, cwd }, function(err, files) {
+      if (err) {
+        return error(err)
+      }
+
+      files.forEach(filePath => {
+        add(filePath)
+      })
+
+      end()
     })
 
-    watcher.on('error', err => error(err))
-
-    return () => watcher.close()
+    return () => {}
   })
 
   return { newFiles$ }

@@ -12,7 +12,10 @@ const config = {
 const library = new Library()
 
 watch(config)
-  .observe(photo => library.addPhoto(photo))
+  .observe(photo => {
+    console.log('📷', photo.relativePath)
+    library.addPhoto(photo)
+  })
   .then(success => console.log('completed', success))
   .catch(error => console.log('error', error))
 
