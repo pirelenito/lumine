@@ -6,7 +6,7 @@ export default async (exif: Tags): Promise<Metadata> => {
     createdAt: exif.CreateDate
       ? (exif.CreateDate as ExifDate).toDate().getTime()
       : (exif.FileModifyDate as ExifDate).toDate().getTime(),
-    cameraModel: exif.Model.toString(),
+    cameraModel: exif.Model,
     gps: getGps(exif),
   }
 }

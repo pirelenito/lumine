@@ -6,7 +6,7 @@ export default interface Photo {
 
 export interface Metadata {
   createdAt: number
-  cameraModel: string
+  cameraModel?: string | number
   gps?: GPS
 }
 
