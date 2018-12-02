@@ -18,7 +18,7 @@ export interface FileMetadata {
 
 export interface ExifMetadata {
   dates: {
-    createdAt: number
+    createdAt?: number
   }
   exif: any
   image: any

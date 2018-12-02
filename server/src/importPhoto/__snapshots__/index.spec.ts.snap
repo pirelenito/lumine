@@ -427,6 +427,46 @@ Object {
 }
 `;
 
+exports[`loads nokia5200.jpg 1`] = `
+Object {
+  "contentHash": "4ea53a04af429bbc3b5e741f3214d7f05a98a177",
+  "metadata": Object {
+    "exif": Object {
+      "dates": Object {
+        "createdAt": undefined,
+      },
+      "exif": Object {
+        "ColorSpace": 1,
+        "ExifImageHeight": 480,
+        "ExifImageWidth": 640,
+      },
+      "gps": Object {},
+      "image": Object {
+        "ExifOffset": 157,
+        "Make": "Nokia",
+        "Model": "5200",
+        "Orientation": 1,
+        "ResolutionUnit": 2,
+        "Software": "V 04.72",
+        "XResolution": 72,
+        "YCbCrPositioning": 1,
+        "YResolution": 72,
+      },
+    },
+    "file": Object {
+      "createdAt": 1543748137000,
+      "modifiedAt": 1543748137000,
+      "size": 48066,
+    },
+  },
+  "preview": Object {
+    "fullSizePath": "fullSize/4e/a53a04af429bbc3b5e741f3214d7f05a98a177.jpg",
+    "thumbnailPath": "thumbnail/4e/a53a04af429bbc3b5e741f3214d7f05a98a177.jpg",
+  },
+  "relativePath": "nokia5200.jpg",
+}
+`;
+
 exports[`loads sonyA6000.arw 1`] = `
 Object {
   "contentHash": "98ce370e686f5a40a02523058679a06ca3ff4ce2",
