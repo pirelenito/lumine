@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "test": "jest"
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "jest",
+    "test:integration": "jest --testMatch \"**/?(*.)+(integration-spec).ts?(x)\""
   },
   "keywords": [],
   "author": "",
