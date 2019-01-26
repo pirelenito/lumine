@@ -1,7 +1,7 @@
-import watch from './watch'
+import watch from '../src/watch'
 
-import Library from './Library'
-import startHttpServer from './startHttpServer'
+import Library from '../src/Library'
+import startHttpServer from '../src/startHttpServer'
 
 const config = {
   libraryBasePath: '/data/masters',

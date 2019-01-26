@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "ts-node bin/index.ts",
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "jest",
     "test:integration": "jest --testMatch \"**/?(*.)+(integration-spec).ts?(x)\""
