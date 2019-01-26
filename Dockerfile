@@ -11,23 +11,24 @@
 
 # ------ build service ------
 
-FROM node:10.13.0
+FROM node:10.13.0-jessie
 
 # ImageMagick installation adapted from:
-# - https://hub.docker.com/r/starefossen/node-imagemagick/~/dockerfile/
+# - https://raw.githubusercontent.com/Starefossen/docker-node-imagemagick/master/5-6/Dockerfile
 # - http://www.imagemagick.org/script/advanced-unix-installation.php#configure
 
 ENV MAGICK_URL "http://imagemagick.org/download/releases"
-ENV MAGICK_VERSION 7.0.8-14
+ENV MAGICK_VERSION 7.0.8-24
+ENV GPG_KEY 8277377A
 
-RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 8277377A \
-  && apt-get update -y \
+RUN apt-get update -y \
   && apt-get install -y --no-install-recommends \
-  libpng-dev libjpeg-dev libtiff-dev libopenjpeg-dev ufraw-batch \
+  libpng-dev libjpeg-dev libtiff-dev libopenjpeg-dev \
   && apt-get remove -y imagemagick \
   && cd /tmp \
   && curl -SLO "${MAGICK_URL}/ImageMagick-${MAGICK_VERSION}.tar.xz" \
   && curl -SLO "${MAGICK_URL}/ImageMagick-${MAGICK_VERSION}.tar.xz.asc" \
+  && (gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$GPG_KEY" || gpg --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$GPG_KEY" || gpg --keyserver hkp://pgp.mit.edu:80 --recv-keys "$GPG_KEY") \
   && gpg --verify "ImageMagick-${MAGICK_VERSION}.tar.xz.asc" "ImageMagick-${MAGICK_VERSION}.tar.xz" \
   && tar xf "ImageMagick-${MAGICK_VERSION}.tar.xz" \
   && cd "ImageMagick-${MAGICK_VERSION}" \
@@ -40,7 +41,25 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 8277377A \
   --with-png \
   --with-tiff \
   --with-quantum-depth=8 \
+  --without-magick-plus-plus \
+  --without-bzlib \
+  --without-zlib \
+  --without-dps \
+  --without-fftw \
+  --without-fpx \
+  --without-djvu \
+  --without-fontconfig \
+  --without-freetype \
+  --without-jbig \
+  --without-lcms \
+  --without-lcms2 \
+  --without-lqr \
+  --without-lzma \
+  --without-openexr \
+  --without-pango \
+  --without-webp \
   --without-x \
+  --without-xml \
   && make \
   && make install \
   && ldconfig /usr/local/lib \
