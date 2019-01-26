@@ -2,8 +2,10 @@ import { create } from '@most/create'
 import path from 'path'
 import glob from 'glob'
 import Config from './Config'
-import { fromPromise } from 'most'
+import { fromPromise, Stream } from 'most'
+import { mergeMapConcurrently } from 'most/lib/combinator/mergeConcurrently'
 import importPhoto from './importPhoto'
+import Photo from './Photo'
 
 function watchFiles(basePath: string) {
   const newFiles$ = create<string>((add, end, error) => {
@@ -31,7 +33,11 @@ function watchFiles(basePath: string) {
 export default function watch(config: Config) {
   const { newFiles$ } = watchFiles(config.libraryBasePath)
 
-  const photo$ = newFiles$.concatMap(filePath => fromPromise(importPhoto(config)(filePath)))
+  const photo$ = mergeMapConcurrently(
+    (filePath: string) => fromPromise(importPhoto(config)(filePath)),
+    8,
+    newFiles$,
+  ) as Stream<Photo>
 
   return photo$
 }

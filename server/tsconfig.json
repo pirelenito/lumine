@@ -9,7 +9,8 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/*", "src/types/*"]
+      "*": ["node_modules/*", "src/types/*"],
+      "most/lib/combinator/mergeConcurrently": ["src/types/vendor.d.ts"]
     }
   },
   "include": ["src/**/*"]
