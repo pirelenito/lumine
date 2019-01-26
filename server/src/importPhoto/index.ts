@@ -11,7 +11,6 @@ export default (config: Config) => async (relativePath: string): Promise<Photo> 
   const contentHash = await calculateContentHash(fullPath)
 
   return await loadOrWriteCache<Photo>(config.cacheBasePath, 'data', contentHash, 'json', async () => {
-    // uses the preview image to read the exif data because RAW images are not supported
     const exif = await getExif(config)(contentHash, relativePath)
     const metadata = await readMetadata(exif)
 
