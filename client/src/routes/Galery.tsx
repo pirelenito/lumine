@@ -27,6 +27,19 @@ export default function Galery() {
           <div key={key} style={style}>
             <Link to={`/media/${photo.mediaType}/${photo.contentHash}`}>
               <img src={thumbnail} style={{ padding: 5, width: 190, height: 190 }} />
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 5,
+                  left: 5,
+                  right: 5,
+                  textAlign: 'center',
+                  color: 'white',
+                  background: 'rgba(0,0,0,0.5)',
+                }}
+              >
+                {new Date(photo.metadata.createdAt).toLocaleDateString()}
+              </div>
             </Link>
           </div>
         )
