@@ -1,13 +1,13 @@
 # ------ build client ------
 
-# FROM node:10.13.0 AS client
+FROM node:10.13.0 AS client
 
-# RUN mkdir -p /usr/src/app/client
-# WORKDIR /usr/src/app/client
+RUN mkdir -p /usr/src/app/client
+WORKDIR /usr/src/app/client
 
-# COPY client /usr/src/app/client/
-# RUN yarn install && yarn cache clean --force
-# RUN yarn build
+COPY client /usr/src/app/client/
+RUN yarn install && yarn cache clean --force
+RUN yarn build
 
 # ------ build service ------
 
