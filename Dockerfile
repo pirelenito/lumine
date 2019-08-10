@@ -23,7 +23,8 @@ COPY server/yarn.lock /usr/src/app/server/
 RUN yarn install && yarn cache clean --force
 COPY server /usr/src/app/server
 
-# COPY --from=client /usr/src/app/client/dist /usr/src/app/client/dist
+RUN mkdir -p /usr/src/app/client/build
+COPY --from=client /usr/src/app/client/build /usr/src/app/client/build
 
 EXPOSE 80
 
