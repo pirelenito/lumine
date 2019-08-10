@@ -1,5 +1,5 @@
 import { promisify } from 'util'
-import { join } from 'path'
+import { join, relative } from 'path'
 import { exec } from 'child_process'
 import { exiftool, Tags } from 'exiftool-vendored'
 import { ensureCachePathExists, loadOrWriteCache } from '../cache'
@@ -15,6 +15,12 @@ export const getExif = (config: Config) => async (contentHash: string, relativeP
 }
 
 export const getThumbnail = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
+  return isVideo(relativePath)
+    ? getVideoThumbnail(config)(contentHash, relativePath)
+    : getPhotoThumbnail(config)(contentHash, relativePath)
+}
+
+const getPhotoThumbnail = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
   return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async cachePath => {
@@ -24,10 +30,20 @@ export const getThumbnail = (config: Config) => async (contentHash: string, rela
   })
 }
 
+const getVideoThumbnail = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
+  const fullPath = join(config.libraryBasePath, relativePath)
+
+  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async cachePath => {
+    await promisifiedExec(
+      `ffmpeg -ss 4 -i "${fullPath}" -vf "thumbnail,scale=200:200,crop=200:200" -vframes 1 "${cachePath}"`,
+    )
+  })
+}
+
 export const getFullSize = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
-  if (!isRaw(relativePath)) return fullPath
+  if (!isRaw(relativePath) || isVideo(relativePath)) return fullPath
 
   return await ensureCachePathExists(config.cacheBasePath, '1080p', contentHash, 'jpg', async cachePath => {
     await promisifiedExec(`magick convert -resize 1920x1080\\> "${fullPath}" "${cachePath}"`)
@@ -35,3 +51,5 @@ export const getFullSize = (config: Config) => async (contentHash: string, relat
 }
 
 const isRaw = (filename: string) => !filename.match(/\.(jpg|jpeg|png)$/i)
+
+const isVideo = (filename: string) => !!filename.match(/\.(mp4|avi)$/i)
