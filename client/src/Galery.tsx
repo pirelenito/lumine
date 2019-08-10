@@ -44,7 +44,9 @@ export default function Galery({}) {
   return (
     <Grid
       cellRenderer={({ columnIndex, key, rowIndex, style }: any) => {
-        const thumbnail = `/api/thumbnail/${photos[rowIndex * 4 + columnIndex].contentHash}`
+        const media = photos[rowIndex * columnCount + columnIndex]
+
+        const thumbnail = `/api/thumbnail/${media.contentHash}`
 
         return (
           <div key={key} style={style}>
