@@ -31,8 +31,8 @@ export const GaleryProvider = ({ children }: { children: ReactNode }) => {
       .then(function(response) {
         return response.json()
       })
-      .then(function(photos) {
-        setPhoto(photos)
+      .then(function(photos: Photo[]) {
+        setPhoto(photos.sort(photo => photo.metadata.createdAt))
       })
   }, [])
 
