@@ -10,10 +10,9 @@ RUN apt-get install -y ffmpeg libavcodec-extra58
 
 ENV MAGICK_URL "http://imagemagick.org/download/releases"
 ENV MAGICK_VERSION 7.0.8-59
-ENV GPG_KEY 8277377A
 
 RUN apt-get install -y --no-install-recommends \
-  ufraw ufraw-batch libpng-dev libjpeg-dev libtiff-dev libopenjp2-7-dev \
+  libraw-dev libpng-dev libjpeg-dev libtiff-dev libopenjp2-7-dev \
   && apt-get remove -y imagemagick \
   && cd /tmp \
   && curl -SLO "${MAGICK_URL}/ImageMagick-${MAGICK_VERSION}.tar.xz" \
