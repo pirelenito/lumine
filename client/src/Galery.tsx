@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 
-interface Media {
+export interface Photo {
   relativePath: string
   contentHash: string
   metadata: Metadata
+  mediaType: 'photo' | 'video'
 }
 
 interface Metadata {
@@ -18,12 +19,12 @@ interface GPS {
   longitude: number
 }
 
-const context = createContext<Media[]>([])
+const context = createContext<Photo[]>([])
 
 export const useGalery = () => useContext(context)
 
 export const GaleryProvider = ({ children }: { children: ReactNode }) => {
-  const [media, setMedia] = useState<Media[]>([])
+  const [photo, setPhoto] = useState<Photo[]>([])
 
   useEffect(() => {
     fetch('/api/photos')
@@ -31,9 +32,9 @@ export const GaleryProvider = ({ children }: { children: ReactNode }) => {
         return response.json()
       })
       .then(function(photos) {
-        setMedia(photos)
+        setPhoto(photos)
       })
   }, [])
 
-  return <context.Provider value={media}>{children}</context.Provider>
+  return <context.Provider value={photo}>{children}</context.Provider>
 }

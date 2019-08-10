@@ -20,12 +20,12 @@ export default function Galery() {
   return (
     <Grid
       cellRenderer={({ columnIndex, key, rowIndex, style }: any) => {
-        const contentHash = galery[rowIndex * columnCount + columnIndex].contentHash
-        const thumbnail = `/api/thumbnail/${contentHash}`
+        const photo = galery[rowIndex * columnCount + columnIndex]
+        const thumbnail = `/api/thumbnail/${photo.contentHash}`
 
         return (
           <div key={key} style={style}>
-            <Link to={`/media/${contentHash}`}>
+            <Link to={`/media/${photo.mediaType}/${photo.contentHash}`}>
               <img src={thumbnail} style={{ padding: 5, width: 190, height: 190 }} />
             </Link>
           </div>

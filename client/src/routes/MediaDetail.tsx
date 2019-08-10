@@ -3,10 +3,15 @@ import { RouteChildrenProps } from 'react-router'
 
 interface Params {
   id: string
+  mediaType: string
 }
 
 export default function MediaDetail({ match }: RouteChildrenProps<Params>) {
   if (!match) return null
+
+  const mediaType = match.params.mediaType
+  const src = `/api/fullSize/${match.params.id}`
+
   return (
     <div
       style={{
@@ -20,7 +25,11 @@ export default function MediaDetail({ match }: RouteChildrenProps<Params>) {
         background: '#2c313c',
       }}
     >
-      <img style={{ height: '100vh' }} src={`/api/fullSize/${match.params.id}`} />
+      {mediaType === 'photo' ? (
+        <img style={{ height: '100vh' }} src={src} />
+      ) : (
+        <video style={{ height: '100vh' }} src={src} controls loop />
+      )}
     </div>
   )
 }

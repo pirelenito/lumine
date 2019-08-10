@@ -10,7 +10,7 @@ ReactDOM.render(
   <GaleryProvider>
     <Router>
       <Route path="/" component={Galery} />
-      <Route path="/media/:id" component={MediaDetail} />
+      <Route path="/media/:mediaType/:id" component={MediaDetail} />
     </Router>
   </GaleryProvider>,
   document.getElementById('root'),
