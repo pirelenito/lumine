@@ -68,6 +68,22 @@ Object {
 }
 `;
 
+exports[`loads nokia7.mp4 1`] = `
+Object {
+  "contentHash": "11ef51200016b846409880000",
+  "metadata": Object {
+    "cameraModel": undefined,
+    "createdAt": 1561248000000,
+    "gps": Object {
+      "altitude": undefined,
+      "latitude": 59.6547,
+      "longitude": 17.9353,
+    },
+  },
+  "relativePath": "nokia7.mp4",
+}
+`;
+
 exports[`loads nokia620.jpg 1`] = `
 Object {
   "contentHash": "15f05d00001674cc286200000",
