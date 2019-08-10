@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Grid } from 'react-virtualized'
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 
-interface Photo {
+interface Media {
   relativePath: string
   contentHash: string
   metadata: Metadata
@@ -19,47 +18,22 @@ interface GPS {
   longitude: number
 }
 
-export default function Galery({}) {
-  const [photos, setPhotos] = useState<Photo[]>([])
-  const [height, setHeight] = useState(window.innerHeight)
-  const [width, setWidth] = useState(window.innerWidth)
-  const columnCount = Math.floor(width / 200)
-  const rowCount = Math.floor(photos.length / columnCount)
+const context = createContext<Media[]>([])
+
+export const useGalery = () => useContext(context)
+
+export const GaleryProvider = ({ children }: { children: ReactNode }) => {
+  const [media, setMedia] = useState<Media[]>([])
 
   useEffect(() => {
-    window.addEventListener('resize', () => {
-      setHeight(window.innerHeight)
-      setWidth(window.innerWidth)
-    })
-
     fetch('/api/photos')
       .then(function(response) {
         return response.json()
       })
       .then(function(photos) {
-        setPhotos(photos)
+        setMedia(photos)
       })
   }, [])
 
-  return (
-    <Grid
-      cellRenderer={({ columnIndex, key, rowIndex, style }: any) => {
-        const media = photos[rowIndex * columnCount + columnIndex]
-
-        const thumbnail = `/api/thumbnail/${media.contentHash}`
-
-        return (
-          <div key={key} style={style}>
-            <img src={thumbnail} style={{ padding: 5, width: 190, height: 190 }} />
-          </div>
-        )
-      }}
-      columnCount={columnCount}
-      rowCount={rowCount}
-      height={height}
-      width={width}
-      columnWidth={200}
-      rowHeight={200}
-    />
-  )
+  return <context.Provider value={media}>{children}</context.Provider>
 }
