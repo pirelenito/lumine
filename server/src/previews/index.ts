@@ -50,6 +50,8 @@ export const getFullSize = (config: Config) => async (contentHash: string, relat
   })
 }
 
+export const getMediaType = (filename: string) => (isVideo(filename) ? 'video' : 'photo')
+
 const isRaw = (filename: string) => !filename.match(/\.(jpg|jpeg|png)$/i)
 
 const isVideo = (filename: string) => !!filename.match(/\.(mp4|avi)$/i)

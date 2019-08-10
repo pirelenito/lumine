@@ -4,7 +4,7 @@ import calculateContentHash from './calculateContentHash'
 import readMetadata from './readMetadata'
 import Config from '../Config'
 import { loadOrWriteCache } from '../cache'
-import { getExif } from '../previews'
+import { getExif, getMediaType } from '../previews'
 
 export default (config: Config) => async (relativePath: string): Promise<Photo> => {
   const fullPath = join(config.libraryBasePath, relativePath)
@@ -13,7 +13,8 @@ export default (config: Config) => async (relativePath: string): Promise<Photo> 
   return await loadOrWriteCache<Photo>(config.cacheBasePath, 'data', contentHash, 'json', async () => {
     const exif = await getExif(config)(contentHash, relativePath)
     const metadata = await readMetadata(exif)
+    const mediaType = getMediaType(relativePath)
 
-    return { relativePath, contentHash, metadata }
+    return { relativePath, contentHash, metadata, mediaType }
   })
 }

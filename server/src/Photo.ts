@@ -2,6 +2,7 @@ export default interface Photo {
   relativePath: string
   contentHash: string
   metadata: Metadata
+  mediaType: 'photo' | 'video'
 }
 
 export interface Metadata {
