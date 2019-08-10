@@ -159,3 +159,15 @@ Object {
   "relativePath": "sonyNex3.jpg",
 }
 `;
+
+exports[`loads sonya6000.MP4 1`] = `
+Object {
+  "contentHash": "70e33e000016985ba70300000",
+  "metadata": Object {
+    "cameraModel": undefined,
+    "createdAt": 1552694400000,
+    "gps": undefined,
+  },
+  "relativePath": "sonya6000.MP4",
+}
+`;
