@@ -13,7 +13,7 @@ ENV MAGICK_VERSION 7.0.8-59
 ENV GPG_KEY 8277377A
 
 RUN apt-get install -y --no-install-recommends \
-  libpng-dev libjpeg-dev libtiff-dev libopenjp2-7-dev \
+  ufraw ufraw-batch libpng-dev libjpeg-dev libtiff-dev libopenjp2-7-dev \
   && apt-get remove -y imagemagick \
   && cd /tmp \
   && curl -SLO "${MAGICK_URL}/ImageMagick-${MAGICK_VERSION}.tar.xz" \
