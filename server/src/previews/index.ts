@@ -35,7 +35,7 @@ const getVideoThumbnail = (config: Config) => async (contentHash: string, relati
 
   return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async cachePath => {
     await promisifiedExec(
-      `ffmpeg -ss 4 -i "${fullPath}" -vf "thumbnail,scale=200:200,crop=200:200" -vframes 1 "${cachePath}"`,
+      `ffmpeg -ss 1 -i "${fullPath}" -vf "thumbnail,scale=200:200,crop=200:200" -vframes 1 "${cachePath}"`,
     )
   })
 }
