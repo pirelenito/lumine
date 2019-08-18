@@ -24,11 +24,13 @@ const getPhotoThumbnail = (config: Config) => async (contentHash: string, relati
   const fullPath = join(config.libraryBasePath, relativePath)
 
   return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async cachePath => {
-    isRaw(relativePath)
-      ? await exiftool.extractThumbnail(fullPath, cachePath)
-      : await promisifiedExec(
-          `magick convert -size 200x200 -thumbnail 200x200^ -gravity center -extent 200x200 +profile "*" "${fullPath}" "${cachePath}"`,
-        )
+    try {
+      await exiftool.extractThumbnail(fullPath, cachePath)
+    } catch {
+      await promisifiedExec(
+        `magick convert -size 200x200 -thumbnail 200x200^ -gravity center -extent 200x200 +profile "*" "${fullPath}" "${cachePath}"`,
+      )
+    }
   })
 }
 
