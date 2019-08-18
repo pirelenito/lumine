@@ -74,6 +74,7 @@ export default function Galery() {
       {({ onSectionRendered, scrollToColumn, scrollToRow }) => {
         return (
           <Grid
+            style={{ display: 'flex', justifyContent: 'center' }}
             cellRenderer={({ columnIndex, key, rowIndex, style }: any) => {
               const photo = galery[rowIndex * columnCount + columnIndex]
               return (
