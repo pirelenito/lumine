@@ -1,7 +1,49 @@
 import React, { useState, useEffect } from 'react'
 import { Grid, ArrowKeyStepper } from 'react-virtualized'
-import { useGalery } from '../galery'
+import { useGalery, Photo } from '../galery'
 import { Link } from 'react-router-dom'
+import Spinner from './Spinner'
+
+const Thumbnail = ({ photo, selected }: { photo: Photo; selected: boolean }) => {
+  const [thumbnail, setThumbnail] = useState<string | null>(null)
+  const [loaded, setLoaded] = useState<boolean>(false)
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setThumbnail(`/api/thumbnail/${photo.contentHash}`)
+    }, 500)
+
+    return () => clearTimeout(timeoutId)
+  }, [photo])
+
+  return (
+    <Link to={`/media/${photo.mediaType}/${photo.contentHash}`}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+        {!loaded && <Spinner />}
+        {thumbnail && (
+          <img
+            src={thumbnail}
+            onLoad={() => setLoaded(true)}
+            style={{ position: 'absolute', top: 5, left: 5, width: 190, height: 190 }}
+          />
+        )}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 5,
+            left: 5,
+            right: 5,
+            textAlign: 'center',
+            color: 'white',
+            background: selected ? 'rgba(0,255,0,0.5)' : 'rgba(0,0,0,0.5)',
+          }}
+        >
+          {new Date(photo.metadata.createdAt).toLocaleDateString()}
+        </div>
+      </div>
+    </Link>
+  )
+}
 
 export default function Galery() {
   const galery = useGalery()
@@ -34,29 +76,9 @@ export default function Galery() {
           <Grid
             cellRenderer={({ columnIndex, key, rowIndex, style }: any) => {
               const photo = galery[rowIndex * columnCount + columnIndex]
-              const thumbnail = `/api/thumbnail/${photo.contentHash}`
-
               return (
                 <div key={key} style={style}>
-                  <Link to={`/media/${photo.mediaType}/${photo.contentHash}`}>
-                    <img src={thumbnail} style={{ padding: 5, width: 190, height: 190 }} />
-                    <div
-                      style={{
-                        position: 'absolute',
-                        bottom: 5,
-                        left: 5,
-                        right: 5,
-                        textAlign: 'center',
-                        color: 'white',
-                        background:
-                          rowIndex === scrollToRow && columnIndex === scrollToColumn
-                            ? 'rgba(0,255,0,0.5)'
-                            : 'rgba(0,0,0,0.5)',
-                      }}
-                    >
-                      {new Date(photo.metadata.createdAt).toLocaleDateString()}
-                    </div>
-                  </Link>
+                  <Thumbnail photo={photo} selected={rowIndex === scrollToRow && columnIndex === scrollToColumn} />
                 </div>
               )
             }}
