@@ -1,5 +1,5 @@
 import { promisify } from 'util'
-import { join, relative } from 'path'
+import { join } from 'path'
 import { exec } from 'child_process'
 import { exiftool, Tags } from 'exiftool-vendored'
 import { ensureCachePathExists, loadOrWriteCache } from '../cache'
@@ -24,9 +24,11 @@ const getPhotoThumbnail = (config: Config) => async (contentHash: string, relati
   const fullPath = join(config.libraryBasePath, relativePath)
 
   return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async cachePath => {
-    await promisifiedExec(
-      `magick convert -size 200x200 -thumbnail 200x200^ -gravity center -extent 200x200 +profile "*" "${fullPath}" "${cachePath}"`,
-    )
+    isRaw(relativePath)
+      ? await exiftool.extractThumbnail(fullPath, cachePath)
+      : await promisifiedExec(
+          `magick convert -size 200x200 -thumbnail 200x200^ -gravity center -extent 200x200 +profile "*" "${fullPath}" "${cachePath}"`,
+        )
   })
 }
 
