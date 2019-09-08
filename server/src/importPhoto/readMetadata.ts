@@ -3,9 +3,10 @@ import { Tags, ExifDate } from 'exiftool-vendored'
 
 export default async (exif: Tags): Promise<Metadata> => {
   return {
-    createdAt: exif.CreateDate
-      ? toDate(exif.CreateDate as ExifDate).getTime()
-      : toDate(exif.FileModifyDate as ExifDate).getTime(),
+    createdAt:
+      exif.CreateDate && (exif.CreateDate as ExifDate).year
+        ? toDate(exif.CreateDate as ExifDate).getTime()
+        : toDate(exif.FileModifyDate as ExifDate).getTime(),
     cameraModel: exif.Model,
     gps: getGps(exif),
   }

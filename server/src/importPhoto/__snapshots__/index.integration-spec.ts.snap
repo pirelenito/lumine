@@ -124,6 +124,19 @@ Object {
 }
 `;
 
+exports[`loads s300d.jpg 1`] = `
+Object {
+  "contentHash": "a4c2d00000116f42673c80000",
+  "mediaType": "photo",
+  "metadata": Object {
+    "cameraModel": "u10D,S300D,u300D",
+    "createdAt": 1198018800000,
+    "gps": undefined,
+  },
+  "relativePath": "s300d.jpg",
+}
+`;
+
 exports[`loads sonyA6000.arw 1`] = `
 Object {
   "contentHash": "17f80000001674cc286200000",
