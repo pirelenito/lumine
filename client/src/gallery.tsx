@@ -21,9 +21,9 @@ interface GPS {
 
 const context = createContext<Photo[]>([])
 
-export const useGalery = () => useContext(context)
+export const useGallery = () => useContext(context)
 
-export const GaleryProvider = ({ children }: { children: ReactNode }) => {
+export const GalleryProvider = ({ children }: { children: ReactNode }) => {
   const [photo, setPhoto] = useState<Photo[]>([])
 
   useEffect(() => {
