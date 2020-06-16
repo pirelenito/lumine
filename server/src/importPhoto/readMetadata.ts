@@ -1,18 +1,20 @@
 import { Metadata, GPS } from '../Photo'
-import { Tags, ExifDate } from 'exiftool-vendored'
+import { Tags, ExifDateTime } from 'exiftool-vendored'
 
 export default async (exif: Tags): Promise<Metadata> => {
   return {
     createdAt:
-      exif.CreateDate && (exif.CreateDate as ExifDate).year
-        ? toDate(exif.CreateDate as ExifDate).getTime()
-        : toDate(exif.FileModifyDate as ExifDate).getTime(),
+      exif.CreateDate && (exif.CreateDate as ExifDateTime).year
+        ? getTimestamp(exif.CreateDate as ExifDateTime)
+        : getTimestamp(exif.FileModifyDate),
     cameraModel: exif.Model,
     gps: getGps(exif),
   }
 }
 
-const toDate = (exifDate: ExifDate) => new Date(exifDate.year, exifDate.month - 1, exifDate.day)
+const getTimestamp = (exifDate: ExifDateTime) => {
+  return exifDate.toDate().getTime()
+}
 
 const getGps = (exif: Tags): GPS => {
   if (!exif.GPSAltitude && !exif.GPSLatitude && !exif.GPSLongitude) {
