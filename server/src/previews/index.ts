@@ -58,4 +58,4 @@ export const getMediaType = (filename: string) => (isVideo(filename) ? 'video' :
 
 const isRaw = (filename: string) => !filename.match(/\.(jpg|jpeg|png)$/i)
 
-const isVideo = (filename: string) => !!filename.match(/\.(mp4|avi)$/i)
+const isVideo = (filename: string) => !!filename.match(/\.(mp4|avi|mpg|mov)$/i)

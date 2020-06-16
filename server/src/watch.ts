@@ -10,7 +10,7 @@ import Photo from './Photo'
 function watchFiles(basePath: string) {
   const newFiles$ = create<string>((add, end, error) => {
     const cwd = path.join(basePath)
-    const pattern = '**/*.{arw,jpg,jpeg,mp4,avi}'
+    const pattern = '**/*.{arw,jpg,jpeg,mp4,avi,mov,mpg}'
 
     glob(pattern, { nocase: true, cwd }, function(err, files) {
       if (err) {
