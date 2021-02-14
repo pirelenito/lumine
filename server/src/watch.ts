@@ -34,7 +34,9 @@ export default function watch(config: Config) {
   const { newFiles$ } = watchFiles(config.libraryBasePath)
 
   const photo$ = mergeMapConcurrently(
-    (filePath: string) => fromPromise(importPhoto(config)(filePath)),
+    (filePath: string) => fromPromise(importPhoto(config)(filePath).catch(error => {
+      console.log('⛔️', filePath)
+    })),
     8,
     newFiles$,
   ) as Stream<Photo>
