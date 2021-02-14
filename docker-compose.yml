@@ -1,12 +1,21 @@
-version: '3'
+version: '3.9'
 services:
-  service:
-    build: .
+  client:
+    image: pirelenito/node-ffmpeg-imagemagick:latest
+    working_dir: /usr/src/app/client
     volumes:
-      - ./server:/usr/src/app/server
-      - ./client:/usr/src/app/client
+      - ./:/usr/src/app
+    ports:
+      - 3000:3000
+    command: yarn start
+
+  server:
+    image: pirelenito/node-ffmpeg-imagemagick:latest
+    working_dir: /usr/src/app/server
+    volumes:
+      - ./:/usr/src/app
       - ./server/fixtures:/data/masters
       - ./server/tmp:/data/cache
-    command: yarn start
     ports:
-      - 80:80
+      - 8080:80
+    command: yarn start

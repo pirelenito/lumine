@@ -23,7 +23,7 @@ export const getThumbnail = (config: Config) => async (contentHash: string, rela
 const getPhotoThumbnail = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
-  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async cachePath => {
+  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async (cachePath) => {
     try {
       await exiftool.extractThumbnail(fullPath, cachePath)
     } catch {
@@ -37,7 +37,7 @@ const getPhotoThumbnail = (config: Config) => async (contentHash: string, relati
 const getVideoThumbnail = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
-  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async cachePath => {
+  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async (cachePath) => {
     await promisifiedExec(
       `ffmpeg -ss 1 -i "${fullPath}" -vf "thumbnail,scale=200:200,crop=200:200" -vframes 1 "${cachePath}"`,
     )
@@ -49,7 +49,7 @@ export const getFullSize = (config: Config) => async (contentHash: string, relat
 
   if (!isRaw(relativePath) || isVideo(relativePath)) return fullPath
 
-  return await ensureCachePathExists(config.cacheBasePath, '1080p', contentHash, 'jpg', async cachePath => {
+  return await ensureCachePathExists(config.cacheBasePath, '1080p', contentHash, 'jpg', async (cachePath) => {
     await promisifiedExec(`magick convert -resize 1920x1080\\> "${fullPath}" "${cachePath}"`)
   })
 }

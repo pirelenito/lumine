@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "format": "prettier --write \"**/*.@(json|js|css|mdx|tsx|ts)\""
+  },
+  "devDependencies": {
+    "prettier": "^2.0.5"
+  }
+}

@@ -12,11 +12,11 @@ const config = {
 const library = new Library()
 
 watch(config)
-  .observe(photo => {
+  .observe((photo) => {
     console.log('📷', photo.relativePath)
     library.addPhoto(photo)
   })
-  .then(success => console.log('completed', success))
-  .catch(error => console.log('error', error))
+  .then((success) => console.log('completed', success))
+  .catch((error) => console.log('error', error))
 
 startHttpServer(config)(library)

@@ -8,16 +8,16 @@ import importPhoto from './importPhoto'
 import Photo from './Photo'
 
 function watchFiles(basePath: string) {
-  const newFiles$ = create<string>((add, end, error) => {
+  return create<string>((add, end, error) => {
     const cwd = path.join(basePath)
     const pattern = '**/*.{arw,jpg,jpeg,mp4,avi,mov,mpg}'
 
-    glob(pattern, { nocase: true, cwd }, function(err, files) {
+    glob(pattern, { nocase: true, cwd }, function (err, files) {
       if (err) {
         return error(err)
       }
 
-      files.forEach(filePath => {
+      files.forEach((filePath) => {
         add(filePath)
       })
 
@@ -26,20 +26,12 @@ function watchFiles(basePath: string) {
 
     return () => {}
   })
-
-  return { newFiles$ }
 }
 
 export default function watch(config: Config) {
-  const { newFiles$ } = watchFiles(config.libraryBasePath)
-
-  const photo$ = mergeMapConcurrently(
-    (filePath: string) => fromPromise(importPhoto(config)(filePath).catch(error => {
-      console.log('⛔️', filePath)
-    })),
+  return mergeMapConcurrently(
+    (filePath: string) => fromPromise(importPhoto(config)(filePath)),
     8,
-    newFiles$,
+    watchFiles(config.libraryBasePath),
   ) as Stream<Photo>
-
-  return photo$
 }

@@ -28,10 +28,10 @@ export const GalleryProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetch('/api/photos')
-      .then(function(response) {
+      .then(function (response) {
         return response.json()
       })
-      .then(function(photos: Photo[]) {
+      .then(function (photos: Photo[]) {
         setPhoto(photos.sort((a, b) => b.metadata.createdAt - a.metadata.createdAt))
       })
   }, [])

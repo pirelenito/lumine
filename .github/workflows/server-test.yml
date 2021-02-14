@@ -1,0 +1,9 @@
+name: server-test
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker-compose run server yarn
+      - run: docker-compose run server yarn test

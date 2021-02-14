@@ -53,8 +53,7 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
               paddingBottom: 4,
             }}
           >
-            {/* {new Date(photo.metadata.createdAt).toLocaleDateString()} */}
-            {photo.metadata.createdAt}
+            {new Date(photo.metadata.createdAt).toLocaleDateString()}
           </div>
           {photo.mediaType === 'video' ? (
             <div style={{ position: 'absolute', right: 10, top: 10 }}>

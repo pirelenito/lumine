@@ -12,7 +12,7 @@ export default (config: Config) => async (relativePath: string): Promise<Photo> 
 
   return await loadOrWriteCache<Photo>(config.cacheBasePath, 'data', contentHash, 'json', async () => {
     const exif = await getExif(config)(contentHash, relativePath)
-    const metadata = await readMetadata(exif)
+    const metadata = await readMetadata(relativePath, exif)
     const mediaType = getMediaType(relativePath)
 
     return { relativePath, contentHash, metadata, mediaType }

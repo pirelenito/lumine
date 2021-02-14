@@ -11,7 +11,7 @@ const config = { libraryBasePath, cacheBasePath, httpPort: 80 }
 beforeAll(() => rimraf.sync(cacheBasePath))
 
 readdirSync(libraryBasePath)
-  .filter(photoPath => photoPath.match(/\.(arw|jpg|jpeg|mp4|)$/i))
+  .filter((photoPath) => photoPath.match(/\.(arw|jpg|jpeg|mp4|avi|mov|mpg)$/i))
   .forEach((photoPath: string) => {
     it(`loads ${photoPath}`, async () => {
       const photo = await loadPhoto(config)(photoPath)

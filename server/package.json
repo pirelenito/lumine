@@ -6,7 +6,7 @@
     "start": "ts-node bin/index.ts",
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "jest --testMatch \"**/?(*.)+(spec).ts?(x)\"",
-    "test:integration": "jest --testMatch \"**/?(*.)+(integration-spec).ts?(x)\""
+    "test:integration": "jest --runInBand --testMatch \"**/?(*.)+(integration-spec).ts?(x)\""
   },
   "keywords": [],
   "author": "",
@@ -20,7 +20,7 @@
     "@types/rimraf": "^2.0.2",
     "cwait": "^1.1.2",
     "date-fns": "^1.29.0",
-    "exiftool-vendored": "^7.3.0",
+    "exiftool-vendored": "^13.1.0",
     "express": "^4.16.4",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.3",
