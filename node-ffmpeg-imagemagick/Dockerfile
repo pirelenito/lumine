@@ -1,4 +1,4 @@
-FROM node:10.16.2-buster
+FROM node:14.15.5-buster
 
 RUN apt-get update -y
 
@@ -9,7 +9,7 @@ RUN apt-get install -y ffmpeg libavcodec-extra58
 # - http://www.imagemagick.org/script/advanced-unix-installation.php#configure
 
 ENV MAGICK_URL "http://imagemagick.org/download/releases"
-ENV MAGICK_VERSION 7.0.8-59
+ENV MAGICK_VERSION 7.0.11-0
 
 RUN apt-get install -y --no-install-recommends \
   libraw-dev libpng-dev libjpeg-dev libtiff-dev libopenjp2-7-dev \
