@@ -50,7 +50,15 @@ export const getFullSize = (config: Config) => async (contentHash: string, relat
   if (!isRaw(relativePath) || isVideo(relativePath)) return fullPath
 
   return await ensureCachePathExists(config.cacheBasePath, '1080p', contentHash, 'jpg', async (cachePath) => {
-    await promisifiedExec(`magick convert -resize 1920x1080\\> "${fullPath}" "${cachePath}"`)
+    try {
+      try {
+        await exiftool.extractJpgFromRaw(fullPath, cachePath)
+      } catch {
+        await exiftool.extractPreview(fullPath, cachePath)
+      }
+    } catch {
+      await promisifiedExec(`magick convert -resize 1920x1080\\> "${fullPath}" "${cachePath}"`)
+    }
   })
 }
 
