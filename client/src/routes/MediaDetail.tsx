@@ -10,7 +10,7 @@ export default function MediaDetail({ match }: RouteChildrenProps<Params>) {
   if (!match) return null
 
   const mediaType = match.params.mediaType
-  const src = `/api/fullSize/${match.params.id}`
+  const src = `/api/preview/${match.params.id}`
 
   return (
     <div

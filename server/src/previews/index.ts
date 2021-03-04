@@ -44,7 +44,7 @@ const getVideoThumbnail = (config: Config) => async (contentHash: string, relati
   })
 }
 
-export const getFullSize = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
+export const getPreview = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
   if (!isRaw(relativePath) || isVideo(relativePath)) return fullPath

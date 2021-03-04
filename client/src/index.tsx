@@ -4,7 +4,7 @@ import './index.css'
 import { GalleryProvider } from './gallery'
 import Gallery from './routes/Gallery'
 import MediaDetail from './routes/MediaDetail'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 ReactDOM.render(
   <GalleryProvider>

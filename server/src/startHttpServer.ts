@@ -3,12 +3,12 @@ import express from 'express'
 import { TaskQueue } from 'cwait'
 import Library from './Library'
 import Config from './Config'
-import { getThumbnail, getFullSize } from './previews'
+import { getThumbnail, getPreview } from './previews'
 
 export default (config: Config) => (library: Library) => {
   const queue = new TaskQueue(Promise, os.cpus().length - 1)
   const getThumbnailThrottled = queue.wrap(getThumbnail(config))
-  const getFullSizeThrottled = queue.wrap(getFullSize(config))
+  const getPreviewThrottled = queue.wrap(getPreview(config))
 
   const app = express()
 
@@ -28,12 +28,12 @@ export default (config: Config) => (library: Library) => {
     }
   })
 
-  app.get('/api/fullSize/:contentHash', async (req, res) => {
+  app.get('/api/preview/:contentHash', async (req, res) => {
     const photo = library.getPhotoByContentHash(req.params.contentHash)
     if (!photo) res.sendStatus(404)
 
     try {
-      res.sendFile(await getFullSizeThrottled(photo.contentHash, photo.relativePath))
+      res.sendFile(await getPreviewThrottled(photo.contentHash, photo.relativePath))
     } catch (error) {
       res.status(500)
       res.send(error)
