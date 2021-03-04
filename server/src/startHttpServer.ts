@@ -42,6 +42,10 @@ export default (config: Config) => (library: Library) => {
 
   app.use(express.static('/usr/src/app/client/build'))
 
+  app.get('/*', (req, res, next) => {
+    res.sendFile('/usr/src/app/client/build/index.html')
+  })
+
   app.listen(config.httpPort, () => {
     console.log(`HTTP server started at ${config.httpPort}!`)
   })
