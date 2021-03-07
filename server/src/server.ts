@@ -1,11 +1,13 @@
 import express from 'express'
-import { setupLibrary } from './library'
+import { Library } from './library'
 import Config from './Config'
 
 export const startServer = async (config: Config) => {
-  const library = await setupLibrary(config)
+  const library = new Library(config)
 
   const app = express()
+
+  app.get('/api/status', (req, res) => res.json(library.scanningInfo))
 
   app.get('/api/photos', (req, res) => res.json(library.getPhotos()))
 
@@ -46,4 +48,6 @@ export const startServer = async (config: Config) => {
   app.listen(config.httpPort, () => {
     console.log(`HTTP server started at ${config.httpPort}!`)
   })
+
+  return library.scanFiles()
 }
