@@ -3,7 +3,55 @@ import { FixedSizeGrid as Grid } from 'react-window'
 import { Link } from 'react-router-dom'
 import { RouteChildrenProps } from 'react-router'
 import Spinner from './Spinner'
-import AutoSizer from 'react-virtualized-auto-sizer'
+
+interface Params {
+  mediaType: string
+}
+
+export default ({ match }: RouteChildrenProps<Params>) => {
+  if (!match) return null
+  const mediaType = match.params.mediaType
+  const [photos, setPhotos] = useState<Photo[]>([])
+  const [width, setWidth] = useState(window.innerWidth)
+  const [height, setHeight] = useState(window.innerHeight)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setHeight(window.innerHeight)
+      setWidth(window.innerWidth)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  })
+
+  useEffect(() => {
+    fetch(`/api/${mediaType === 'videos' ? 'videos' : 'photos'}`)
+      .then(function (response) {
+        return response.json()
+      })
+      .then(setPhotos)
+  }, [mediaType])
+
+  const columnCount = Math.floor(width / 200)
+  const rowCount = Math.ceil(photos.length / columnCount)
+
+  return (
+    <Grid
+      itemData={{ columnCount, photos }}
+      columnCount={columnCount}
+      columnWidth={200}
+      height={height}
+      rowCount={rowCount}
+      rowHeight={200}
+      width={width}
+      overscanRowCount={4}
+      style={{ display: 'flex', justifyContent: 'center' }}
+    >
+      {Cell}
+    </Grid>
+  )
+}
 
 interface Photo {
   relativePath: string
@@ -91,55 +139,5 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
         </div>
       </Link>
     </div>
-  )
-}
-
-interface InnerGalleryProps {
-  width: number
-  height: number
-  mediaType: string
-}
-
-const InnerGallery = ({ height, width, mediaType }: InnerGalleryProps) => {
-  const [photos, setPhotos] = useState<Photo[]>([])
-
-  useEffect(() => {
-    fetch(`/api/${mediaType === 'videos' ? 'videos' : 'photos'}`)
-      .then(function (response) {
-        return response.json()
-      })
-      .then(setPhotos)
-  }, [mediaType])
-
-  const columnCount = Math.floor(width / 200)
-  const rowCount = Math.ceil(photos.length / columnCount)
-
-  return (
-    <Grid
-      itemData={{ columnCount, photos }}
-      columnCount={columnCount}
-      columnWidth={200}
-      height={height}
-      rowCount={rowCount}
-      rowHeight={200}
-      width={width}
-      overscanRowCount={4}
-      style={{ display: 'flex', justifyContent: 'center' }}
-    >
-      {Cell}
-    </Grid>
-  )
-}
-
-interface Params {
-  mediaType: string
-}
-
-export default ({ match }: RouteChildrenProps<Params>) => {
-  if (!match) return null
-  const mediaType = match.params.mediaType
-
-  return (
-    <AutoSizer>{({ height, width }) => <InnerGallery height={height} width={width} mediaType={mediaType} />}</AutoSizer>
   )
 }
