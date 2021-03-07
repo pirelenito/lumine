@@ -22,6 +22,7 @@ const importPhotoThrottled = queue.wrap(importPhoto)
 
 class Library {
   photos: Photo[]
+  videos: Photo[]
   config: Config
 
   constructor(config: Config) {
@@ -37,6 +38,8 @@ class Library {
     const photos = await Promise.all(files.map((filePath) => importPhotoThrottled(this.config, filePath)))
 
     this.photos = photos.sort((a, b) => b.metadata.createdAt - a.metadata.createdAt)
+    this.videos = this.photos.filter((photo) => photo.mediaType === 'video')
+    console.log(this.videos)
   }
 
   async getThumbnail(id: string) {
@@ -55,6 +58,10 @@ class Library {
 
   getPhotos() {
     return this.photos
+  }
+
+  getVideos() {
+    return this.videos
   }
 
   getPhotoByid(id: string) {

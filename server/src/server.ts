@@ -9,6 +9,8 @@ export const startServer = async (config: Config) => {
 
   app.get('/api/photos', (req, res) => res.json(library.getPhotos()))
 
+  app.get('/api/videos', (req, res) => res.json(library.getVideos()))
+
   app.get('/api/photos/:id', (req, res) => res.json(library.getPhotoByid(req.params.id)))
 
   app.get('/api/thumbnail/:id', async (req, res) => {

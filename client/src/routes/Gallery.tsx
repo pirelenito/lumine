@@ -1,23 +1,41 @@
 import React, { CSSProperties, useState, useEffect } from 'react'
 import { FixedSizeGrid as Grid } from 'react-window'
 import { Link } from 'react-router-dom'
+import { RouteChildrenProps } from 'react-router'
 import Spinner from './Spinner'
-
 import AutoSizer from 'react-virtualized-auto-sizer'
-import { useGallery, Photo } from '../gallery'
+
+interface Photo {
+  relativePath: string
+  id: string
+  metadata: Metadata
+  mediaType: 'photo' | 'video'
+}
+
+interface Metadata {
+  createdAt: number
+  cameraModel?: string | number
+  gps?: GPS
+}
+
+interface GPS {
+  altitude: number
+  latitude: number
+  longitude: number
+}
 
 interface CellProps {
   style: CSSProperties
   columnIndex: number
   rowIndex: number
-  data: { gallery: Photo[]; columnCount: number }
+  data: { photos: Photo[]; columnCount: number }
 }
 
 const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
   const [thumbnail, setThumbnail] = useState<string | null>(null)
   const [loaded, setLoaded] = useState<boolean>(false)
-  const { gallery, columnCount } = data
-  const photo = gallery[columnCount * rowIndex + columnIndex]
+  const { photos, columnCount } = data
+  const photo = photos[columnCount * rowIndex + columnIndex]
 
   useEffect(() => {
     if (!photo) return
@@ -79,17 +97,26 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
 interface InnerGalleryProps {
   width: number
   height: number
+  mediaType: string
 }
 
-const InnerGallery = ({ height, width }: InnerGalleryProps) => {
-  const gallery = useGallery()
+const InnerGallery = ({ height, width, mediaType }: InnerGalleryProps) => {
+  const [photos, setPhotos] = useState<Photo[]>([])
+
+  useEffect(() => {
+    fetch(`/api/${mediaType === 'videos' ? 'videos' : 'photos'}`)
+      .then(function (response) {
+        return response.json()
+      })
+      .then(setPhotos)
+  }, [mediaType])
 
   const columnCount = Math.floor(width / 200)
-  const rowCount = Math.ceil(gallery.length / columnCount)
+  const rowCount = Math.ceil(photos.length / columnCount)
 
   return (
     <Grid
-      itemData={{ columnCount, gallery }}
+      itemData={{ columnCount, photos }}
       columnCount={columnCount}
       columnWidth={200}
       height={height}
@@ -104,6 +131,15 @@ const InnerGallery = ({ height, width }: InnerGalleryProps) => {
   )
 }
 
-export default () => {
-  return <AutoSizer>{({ height, width }) => <InnerGallery height={height} width={width} />}</AutoSizer>
+interface Params {
+  mediaType: string
+}
+
+export default ({ match }: RouteChildrenProps<Params>) => {
+  if (!match) return null
+  const mediaType = match.params.mediaType
+
+  return (
+    <AutoSizer>{({ height, width }) => <InnerGallery height={height} width={width} mediaType={mediaType} />}</AutoSizer>
+  )
 }
