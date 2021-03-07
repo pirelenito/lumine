@@ -40,33 +40,36 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
             <img
               src={thumbnail}
               onLoad={() => setLoaded(true)}
-              style={{ position: 'absolute', top: 5, left: 5, width: 190, height: 190 }}
+              style={{ position: 'absolute', top: 1, left: 1, width: 198, height: 198 }}
             />
           )}
           <div
             style={{
               position: 'absolute',
-              bottom: 5,
+              bottom: 1,
+              right: 1,
               left: '50%',
-              right: 5,
-              textAlign: 'center',
-              color: 'white',
-              background: 'rgba(0,0,0,0.5)',
+              textAlign: 'right',
+              color: '#adadad',
+              background: 'rgba(0,0,0,0.6)',
+              fontWeight: 'bold',
               fontSize: 12,
-              paddingTop: 4,
-              paddingBottom: 4,
+              paddingTop: 2,
+              paddingBottom: 2,
+              paddingRight: 4,
+              paddingLeft: 4,
             }}
           >
+            {photo.mediaType === 'video' ? (
+              <div style={{ position: 'absolute', left: 4, top: 3 }}>
+                <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="10" cy="10" r="9" stroke="#E3E3E3" strokeWidth="2" />
+                  <path d="M15 10L7.5 14.3301L7.5 5.66987L15 10Z" fill="#E3E3E3" />
+                </svg>
+              </div>
+            ) : null}
             {new Date(photo.metadata.createdAt).toLocaleDateString()}
           </div>
-          {photo.mediaType === 'video' ? (
-            <div style={{ position: 'absolute', right: 10, top: 10 }}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="10" cy="10" r="9" stroke="#E3E3E3" strokeWidth="2" />
-                <path d="M15 10L7.5 14.3301L7.5 5.66987L15 10Z" fill="#E3E3E3" />
-              </svg>
-            </div>
-          ) : null}
         </div>
       </Link>
     </div>
