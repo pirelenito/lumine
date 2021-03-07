@@ -51,20 +51,54 @@ export default ({ match }: RouteChildrenProps<Params>) => {
   const rowCount = Math.ceil(photos.length / columnCount)
 
   return (
-    <Grid
-      itemData={{ columnCount, photos }}
-      columnCount={columnCount}
-      columnWidth={200}
-      height={height}
-      rowCount={rowCount}
-      rowHeight={200}
-      width={width}
-      overscanRowCount={4}
-      innerRef={innerRef}
-      style={{ display: 'flex', justifyContent: 'center' }}
+    <>
+      <Grid
+        itemData={{ columnCount, photos }}
+        columnCount={columnCount}
+        columnWidth={200}
+        height={height}
+        rowCount={rowCount}
+        rowHeight={200}
+        width={width}
+        overscanRowCount={4}
+        innerRef={innerRef}
+        style={{ display: 'flex', justifyContent: 'center' }}
+      >
+        {Cell}
+      </Grid>
+      <NavBar />
+    </>
+  )
+}
+
+const NAV_BAR_HEIGHT = 36
+
+function NavBar() {
+  return (
+    <div
+      style={{
+        paddingLeft: 8,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: NAV_BAR_HEIGHT,
+        background: 'rgb(15 17 21 / 80%)',
+        display: 'flex',
+        alignItems: 'center',
+      }}
     >
-      {Cell}
-    </Grid>
+      <NavBarLink href="/" label="Photos" />
+      <NavBarLink href="/videos" label="Videos" />
+    </div>
+  )
+}
+
+function NavBarLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link style={{ padding: '0px 8px', textDecoration: 'none', color: '#adadad' }} to={href}>
+      {label}
+    </Link>
   )
 }
 
@@ -113,7 +147,7 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
   if (!photo) return null
 
   return (
-    <div style={style}>
+    <div style={{ ...style, top: parseInt((style.top as string) || '0', 10) + NAV_BAR_HEIGHT + 2 }}>
       <Link to={`/media/${photo.mediaType}/${photo.id}`}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           {!loaded && <Spinner />}
