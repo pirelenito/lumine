@@ -20,12 +20,16 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
   const photo = gallery[columnCount * rowIndex + columnIndex]
 
   useEffect(() => {
+    if (!photo) return
+
     const timeoutId = setTimeout(() => {
       setThumbnail(`/api/thumbnail/${photo.id}`)
     }, 500)
 
     return () => clearTimeout(timeoutId)
   }, [photo])
+
+  if (!photo) return null
 
   return (
     <div style={style}>
@@ -58,7 +62,7 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
           {photo.mediaType === 'video' ? (
             <div style={{ position: 'absolute', right: 10, top: 10 }}>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="10" cy="10" r="9" stroke="#E3E3E3" stroke-width="2" />
+                <circle cx="10" cy="10" r="9" stroke="#E3E3E3" strokeWidth="2" />
                 <path d="M15 10L7.5 14.3301L7.5 5.66987L15 10Z" fill="#E3E3E3" />
               </svg>
             </div>
@@ -78,7 +82,7 @@ const InnerGallery = ({ height, width }: InnerGalleryProps) => {
   const gallery = useGallery()
 
   const columnCount = Math.floor(width / 200)
-  const rowCount = Math.floor(gallery.length / columnCount)
+  const rowCount = Math.ceil(gallery.length / columnCount)
 
   return (
     <Grid
