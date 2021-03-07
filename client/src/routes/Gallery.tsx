@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState, useEffect } from 'react'
+import React, { CSSProperties, useState, useEffect, useRef } from 'react'
 import { FixedSizeGrid as Grid } from 'react-window'
 import { Link } from 'react-router-dom'
 import { RouteChildrenProps } from 'react-router'
@@ -10,6 +10,20 @@ interface Params {
 
 export default ({ match }: RouteChildrenProps<Params>) => {
   if (!match) return null
+
+  const innerRef = useRef<HTMLDivElement>(null)
+
+  /**
+   * Hack to force the grid to be centered on the screen
+   * TODO: adapt the size of the cells so that they fill the entire width
+   */
+  useEffect(() => {
+    const element = innerRef.current
+    if (!element) return
+
+    element.style.position = 'relative'
+  })
+
   const mediaType = match.params.mediaType
   const [photos, setPhotos] = useState<Photo[]>([])
   const [width, setWidth] = useState(window.innerWidth)
@@ -46,6 +60,7 @@ export default ({ match }: RouteChildrenProps<Params>) => {
       rowHeight={200}
       width={width}
       overscanRowCount={4}
+      innerRef={innerRef}
       style={{ display: 'flex', justifyContent: 'center' }}
     >
       {Cell}
