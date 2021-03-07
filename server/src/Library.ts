@@ -1,6 +1,13 @@
 import Config from './Config'
 import Photo from './Photo'
-import scanFiles from './scanFiles'
+import os from 'os'
+import path from 'path'
+import glob from 'glob'
+import importPhoto from './importPhoto'
+import { promisify } from 'util'
+import { TaskQueue } from 'cwait'
+
+const globPromisified = promisify(glob)
 
 export default class Library {
   photos: Photo[]
@@ -12,7 +19,14 @@ export default class Library {
   }
 
   async scanFiles() {
-    this.photos = await scanFiles(this.config)
+    const queue = new TaskQueue(Promise, os.cpus().length - 1)
+    const importPhotoThrottled = queue.wrap(importPhoto(this.config))
+
+    const cwd = path.join(this.config.libraryBasePath)
+    const pattern = '**/*.{arw,jpg,jpeg,mp4,avi,mov,mpg}'
+
+    const files = await globPromisified(pattern, { nocase: true, cwd })
+    this.photos = await Promise.all(files.map(importPhotoThrottled))
   }
 
   addPhoto(photo: Photo) {
