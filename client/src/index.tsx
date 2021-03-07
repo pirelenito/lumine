@@ -10,7 +10,7 @@ ReactDOM.render(
   <ScanningInfoWrapper>
     <Router>
       <Route path="/:mediaType?" component={Gallery} />
-      <Route path="/media/:mediaType/:id" component={MediaDetail} />
+      <Route path="/:mediaType/:id" component={MediaDetail} />
     </Router>
   </ScanningInfoWrapper>,
   document.getElementById('root'),

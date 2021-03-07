@@ -40,7 +40,7 @@ export default ({ match }: RouteChildrenProps<Params>) => {
   })
 
   useEffect(() => {
-    fetch(`/api/${mediaType === 'videos' ? 'videos' : 'photos'}`)
+    fetch(`/api/${mediaType === 'video' ? 'videos' : 'photos'}`)
       .then(function (response) {
         return response.json()
       })
@@ -89,7 +89,7 @@ function NavBar() {
       }}
     >
       <NavBarLink href="/" label="Photos" />
-      <NavBarLink href="/videos" label="Videos" />
+      <NavBarLink href="/video" label="Videos" />
     </div>
   )
 }
@@ -148,7 +148,7 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
 
   return (
     <div style={{ ...style, top: parseInt((style.top as string) || '0', 10) + NAV_BAR_HEIGHT + 2 }}>
-      <Link to={`/media/${photo.mediaType}/${photo.id}`}>
+      <Link to={`/${photo.mediaType}/${photo.id}`}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           {!loaded && <Spinner />}
           {thumbnail && (
