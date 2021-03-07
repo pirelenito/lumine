@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start": "ts-node bin/index.ts",
+    "watch": "ts-node-dev bin/index.ts",
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "jest --testMatch \"**/?(*.)+(spec).ts?(x)\"",
     "test:integration": "jest --runInBand --testMatch \"**/?(*.)+(integration-spec).ts?(x)\""
@@ -34,6 +35,7 @@
   "devDependencies": {
     "@types/jest": "^23.3.9",
     "jest": "^23.6.0",
-    "ts-jest": "^23.10.4"
+    "ts-jest": "^23.10.4",
+    "ts-node-dev": "^1.1.6"
   }
 }
