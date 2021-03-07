@@ -1,4 +1,4 @@
-import startHttpServer from '../src/startHttpServer'
+import { startServer } from '../src/server'
 
 const config = {
   libraryBasePath: '/data/masters',
@@ -6,7 +6,7 @@ const config = {
   httpPort: 80,
 }
 
-startHttpServer(config).catch((e) => {
+startServer(config).catch((e) => {
   console.error('Error initializing server', e)
   process.exit(1)
 })

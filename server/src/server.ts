@@ -2,7 +2,7 @@ import express from 'express'
 import { setupLibrary } from './library'
 import Config from './Config'
 
-export default async (config: Config) => {
+export const startServer = async (config: Config) => {
   const library = await setupLibrary(config)
 
   const app = express()
