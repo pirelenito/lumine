@@ -31,9 +31,7 @@ export const GalleryProvider = ({ children }: { children: ReactNode }) => {
       .then(function (response) {
         return response.json()
       })
-      .then(function (photos: Photo[]) {
-        setPhoto(photos.sort((a, b) => b.metadata.createdAt - a.metadata.createdAt))
-      })
+      .then(setPhoto)
   }, [])
 
   return <context.Provider value={photo}>{children}</context.Provider>

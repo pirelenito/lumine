@@ -34,7 +34,9 @@ class Library {
     const pattern = '**/*.{arw,jpg,jpeg,mp4,avi,mov,mpg}'
 
     const files = await globPromisified(pattern, { nocase: true, cwd })
-    this.photos = await Promise.all(files.map((filePath) => importPhotoThrottled(this.config, filePath)))
+    const photos = await Promise.all(files.map((filePath) => importPhotoThrottled(this.config, filePath)))
+
+    this.photos = photos.sort((a, b) => b.metadata.createdAt - a.metadata.createdAt)
   }
 
   async getThumbnail(id: string) {
