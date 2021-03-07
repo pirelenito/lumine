@@ -1,9 +1,18 @@
+import Config from './Config'
 import Photo from './Photo'
+import scanFiles from './scanFiles'
 
 export default class Library {
   photos: Photo[]
-  constructor() {
+  config: Config
+
+  constructor(config: Config) {
+    this.config = config
     this.photos = []
+  }
+
+  async scanFiles() {
+    this.photos = await scanFiles(this.config)
   }
 
   addPhoto(photo: Photo) {
