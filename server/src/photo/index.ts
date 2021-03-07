@@ -1,18 +1,26 @@
+import { exiftool, Tags, ExifDateTime, ExifDate } from 'exiftool-vendored'
+import calculateContentHash from './calculateContentHash'
+import Config from '../Config'
 import { promisify } from 'util'
 import { join } from 'path'
 import { exec } from 'child_process'
-import { exiftool, Tags } from 'exiftool-vendored'
-import { ensureCachePathExists, loadOrWriteCache } from '../cache'
-import Config from '../Config'
+import { ensureCachePathExists, loadOrWriteCache } from './cache'
+import { GPS, Photo } from './types'
+export * from './types'
 
-const promisifiedExec = promisify(exec)
-
-export const getExif = async (config: Config, contentHash: string, relativePath: string): Promise<Tags> => {
+export const importPhoto = async (config: Config, relativePath: string): Promise<Photo> => {
   const fullPath = join(config.libraryBasePath, relativePath)
-  return await loadOrWriteCache<Tags>(config.cacheBasePath, 'exif', contentHash, 'json', async () => {
-    return await exiftool.read(fullPath)
+  const contentHash = await calculateContentHash(fullPath)
+
+  return await loadOrWriteCache<Photo>(config.cacheBasePath, 'data', contentHash, 'json', async () => {
+    const metadata = await readExifMetadata(config, contentHash, relativePath)
+    const mediaType = getMediaType(relativePath)
+
+    return { relativePath, contentHash, metadata, mediaType }
   })
 }
+
+const promisifiedExec = promisify(exec)
 
 export const getThumbnail = async (config: Config, contentHash: string, relativePath: string): Promise<string> => {
   return isVideo(relativePath)
@@ -67,3 +75,47 @@ export const getMediaType = (filename: string) => (isVideo(filename) ? 'video' :
 const isRaw = (filename: string) => !filename.match(/\.(jpg|jpeg|png)$/i)
 
 const isVideo = (filename: string) => !!filename.match(/\.(mp4|avi|mpg|mov)$/i)
+
+const readExifMetadata = async (config: Config, contentHash: string, relativePath: string) => {
+  const fullPath = join(config.libraryBasePath, relativePath)
+  const exif: Tags = await exiftool.read(fullPath)
+
+  return {
+    createdAt: readExifTimestamp(relativePath, exif),
+    cameraModel: exif.Model,
+    gps: readExifGps(exif),
+  }
+}
+
+const readExifTimestamp = (relativePath: string, exif: Tags) => {
+  try {
+    return (exif.CreateDate as ExifDateTime).toDate().getTime()
+  } catch (e) {
+    try {
+      return (exif.ModifyDate as ExifDateTime).toDate().getTime()
+    } catch (e) {
+      try {
+        return (exif.DateCreated as ExifDate).toDate().getTime()
+      } catch (e) {
+        try {
+          return (exif.FileModifyDate as ExifDateTime).toDate().getTime()
+        } catch (e) {
+          console.log(`Error ${relativePath}`, exif.CreateDate)
+          throw e
+        }
+      }
+    }
+  }
+}
+
+const readExifGps = (exif: Tags): GPS => {
+  if (!exif.GPSAltitude && !exif.GPSLatitude && !exif.GPSLongitude) {
+    return
+  }
+
+  return {
+    altitude: exif.GPSAltitude,
+    latitude: exif.GPSLatitude,
+    longitude: exif.GPSLongitude,
+  }
+}

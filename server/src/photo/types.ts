@@ -1,4 +1,4 @@
-export default interface Photo {
+export interface Photo {
   relativePath: string
   contentHash: string
   metadata: Metadata

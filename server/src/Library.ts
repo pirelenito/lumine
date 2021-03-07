@@ -1,12 +1,10 @@
 import Config from './Config'
-import Photo from './Photo'
 import os from 'os'
 import path from 'path'
 import glob from 'glob'
-import importPhoto from './importPhoto'
+import { Photo, importPhoto, getThumbnail, getPreview } from './photo'
 import { promisify } from 'util'
 import { TaskQueue } from 'cwait'
-import { getThumbnail, getPreview } from './previews'
 
 const globPromisified = promisify(glob)
 
