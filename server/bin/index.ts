@@ -6,4 +6,7 @@ const config = {
   httpPort: 80,
 }
 
-startHttpServer(config)
+startHttpServer(config).catch((e) => {
+  console.error('Error initializing server', e)
+  process.exit(1)
+})

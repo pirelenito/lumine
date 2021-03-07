@@ -1,10 +1,17 @@
-import Config from './Config'
+import Config from '../Config'
 import os from 'os'
 import path from 'path'
 import glob from 'glob'
-import { Photo, importPhoto, getThumbnail, getPreview } from './photo'
+import { Photo, importPhoto, getThumbnail, getPreview } from '../photo'
 import { promisify } from 'util'
 import { TaskQueue } from 'cwait'
+
+export const setupLibrary = async (config: Config) => {
+  const library = new Library(config)
+  await library.scanFiles()
+
+  return library
+}
 
 const globPromisified = promisify(glob)
 
@@ -13,7 +20,7 @@ const getThumbnailThrottled = queue.wrap(getThumbnail)
 const getPreviewThrottled = queue.wrap(getPreview)
 const importPhotoThrottled = queue.wrap(importPhoto)
 
-export default class Library {
+class Library {
   photos: Photo[]
   config: Config
 

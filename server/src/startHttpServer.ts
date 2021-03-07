@@ -1,11 +1,9 @@
 import express from 'express'
-import Library from './Library'
+import { setupLibrary } from './library'
 import Config from './Config'
 
-export default (config: Config) => {
-  const library = new Library(config)
-
-  library.scanFiles()
+export default async (config: Config) => {
+  const library = await setupLibrary(config)
 
   const app = express()
 
