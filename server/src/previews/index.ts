@@ -7,20 +7,20 @@ import Config from '../Config'
 
 const promisifiedExec = promisify(exec)
 
-export const getExif = (config: Config) => async (contentHash: string, relativePath: string): Promise<Tags> => {
+export const getExif = async (config: Config, contentHash: string, relativePath: string): Promise<Tags> => {
   const fullPath = join(config.libraryBasePath, relativePath)
   return await loadOrWriteCache<Tags>(config.cacheBasePath, 'exif', contentHash, 'json', async () => {
     return await exiftool.read(fullPath)
   })
 }
 
-export const getThumbnail = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
+export const getThumbnail = async (config: Config, contentHash: string, relativePath: string): Promise<string> => {
   return isVideo(relativePath)
-    ? getVideoThumbnail(config)(contentHash, relativePath)
-    : getPhotoThumbnail(config)(contentHash, relativePath)
+    ? getVideoThumbnail(config, contentHash, relativePath)
+    : getPhotoThumbnail(config, contentHash, relativePath)
 }
 
-const getPhotoThumbnail = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
+const getPhotoThumbnail = async (config: Config, contentHash: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
   return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async (cachePath) => {
@@ -34,7 +34,7 @@ const getPhotoThumbnail = (config: Config) => async (contentHash: string, relati
   })
 }
 
-const getVideoThumbnail = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
+const getVideoThumbnail = async (config: Config, contentHash: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
   return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async (cachePath) => {
@@ -44,7 +44,7 @@ const getVideoThumbnail = (config: Config) => async (contentHash: string, relati
   })
 }
 
-export const getPreview = (config: Config) => async (contentHash: string, relativePath: string): Promise<string> => {
+export const getPreview = async (config: Config, contentHash: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
   if (!isRaw(relativePath) || isVideo(relativePath)) return fullPath

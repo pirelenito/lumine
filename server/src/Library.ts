@@ -6,8 +6,14 @@ import glob from 'glob'
 import importPhoto from './importPhoto'
 import { promisify } from 'util'
 import { TaskQueue } from 'cwait'
+import { getThumbnail, getPreview } from './previews'
 
 const globPromisified = promisify(glob)
+
+const queue = new TaskQueue(Promise, os.cpus().length - 1)
+const getThumbnailThrottled = queue.wrap(getThumbnail)
+const getPreviewThrottled = queue.wrap(getPreview)
+const importPhotoThrottled = queue.wrap(importPhoto)
 
 export default class Library {
   photos: Photo[]
@@ -19,14 +25,25 @@ export default class Library {
   }
 
   async scanFiles() {
-    const queue = new TaskQueue(Promise, os.cpus().length - 1)
-    const importPhotoThrottled = queue.wrap(importPhoto(this.config))
-
     const cwd = path.join(this.config.libraryBasePath)
     const pattern = '**/*.{arw,jpg,jpeg,mp4,avi,mov,mpg}'
 
     const files = await globPromisified(pattern, { nocase: true, cwd })
-    this.photos = await Promise.all(files.map(importPhotoThrottled))
+    this.photos = await Promise.all(files.map((filePath) => importPhotoThrottled(this.config, filePath)))
+  }
+
+  async getThumbnail(contentHash: string) {
+    const photo = this.getPhotoByContentHash(contentHash)
+    if (!photo) return
+
+    return getThumbnailThrottled(this.config, photo.contentHash, photo.relativePath)
+  }
+
+  async getPreview(contentHash: string) {
+    const photo = this.getPhotoByContentHash(contentHash)
+    if (!photo) return
+
+    return getPreviewThrottled(this.config, photo.contentHash, photo.relativePath)
   }
 
   addPhoto(photo: Photo) {

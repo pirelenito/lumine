@@ -1,15 +1,8 @@
-import os from 'os'
 import express from 'express'
-import { TaskQueue } from 'cwait'
 import Library from './Library'
 import Config from './Config'
-import { getThumbnail, getPreview } from './previews'
 
 export default (config: Config) => {
-  const queue = new TaskQueue(Promise, os.cpus().length - 1)
-  const getThumbnailThrottled = queue.wrap(getThumbnail(config))
-  const getPreviewThrottled = queue.wrap(getPreview(config))
-
   const library = new Library(config)
 
   library.scanFiles()
@@ -21,11 +14,11 @@ export default (config: Config) => {
   app.get('/api/photos/:id', (req, res) => res.json(library.getPhotoByContentHash(req.params.id)))
 
   app.get('/api/thumbnail/:contentHash', async (req, res) => {
-    const photo = library.getPhotoByContentHash(req.params.contentHash)
-    if (!photo) res.sendStatus(404)
-
     try {
-      res.sendFile(await getThumbnailThrottled(photo.contentHash, photo.relativePath))
+      const file = await library.getThumbnail(req.params.contentHash)
+      if (!file) res.sendStatus(404)
+
+      res.sendFile(file)
     } catch (error) {
       res.status(500)
       res.send(error.toString())
@@ -33,11 +26,11 @@ export default (config: Config) => {
   })
 
   app.get('/api/preview/:contentHash', async (req, res) => {
-    const photo = library.getPhotoByContentHash(req.params.contentHash)
-    if (!photo) res.sendStatus(404)
-
     try {
-      res.sendFile(await getPreviewThrottled(photo.contentHash, photo.relativePath))
+      const file = await library.getPreview(req.params.contentHash)
+      if (!file) res.sendStatus(404)
+
+      res.sendFile(file)
     } catch (error) {
       res.status(500)
       res.send(error)

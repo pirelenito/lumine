@@ -6,12 +6,12 @@ import Config from '../Config'
 import { loadOrWriteCache } from '../cache'
 import { getExif, getMediaType } from '../previews'
 
-export default (config: Config) => async (relativePath: string): Promise<Photo> => {
+export default async (config: Config, relativePath: string): Promise<Photo> => {
   const fullPath = join(config.libraryBasePath, relativePath)
   const contentHash = await calculateContentHash(fullPath)
 
   return await loadOrWriteCache<Photo>(config.cacheBasePath, 'data', contentHash, 'json', async () => {
-    const exif = await getExif(config)(contentHash, relativePath)
+    const exif = await getExif(config, contentHash, relativePath)
     const metadata = await readMetadata(relativePath, exif)
     const mediaType = getMediaType(relativePath)
 
