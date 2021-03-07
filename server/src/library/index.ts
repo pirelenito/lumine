@@ -37,29 +37,25 @@ class Library {
     this.photos = await Promise.all(files.map((filePath) => importPhotoThrottled(this.config, filePath)))
   }
 
-  async getThumbnail(contentHash: string) {
-    const photo = this.getPhotoByContentHash(contentHash)
+  async getThumbnail(id: string) {
+    const photo = this.getPhotoByid(id)
     if (!photo) return
 
-    return getThumbnailThrottled(this.config, photo.contentHash, photo.relativePath)
+    return getThumbnailThrottled(this.config, photo.id, photo.relativePath)
   }
 
-  async getPreview(contentHash: string) {
-    const photo = this.getPhotoByContentHash(contentHash)
+  async getPreview(id: string) {
+    const photo = this.getPhotoByid(id)
     if (!photo) return
 
-    return getPreviewThrottled(this.config, photo.contentHash, photo.relativePath)
-  }
-
-  addPhoto(photo: Photo) {
-    this.photos.push(photo)
+    return getPreviewThrottled(this.config, photo.id, photo.relativePath)
   }
 
   getPhotos() {
     return this.photos
   }
 
-  getPhotoByContentHash(contentHash: string) {
-    return this.photos.find((photo) => photo.contentHash === contentHash)
+  getPhotoByid(id: string) {
+    return this.photos.find((photo) => photo.id === id)
   }
 }

@@ -21,7 +21,7 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setThumbnail(`/api/thumbnail/${photo.contentHash}`)
+      setThumbnail(`/api/thumbnail/${photo.id}`)
     }, 500)
 
     return () => clearTimeout(timeoutId)
@@ -29,7 +29,7 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
 
   return (
     <div style={style}>
-      <Link to={`/media/${photo.mediaType}/${photo.contentHash}`}>
+      <Link to={`/media/${photo.mediaType}/${photo.id}`}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           {!loaded && <Spinner />}
           {thumbnail && (

@@ -1,5 +1,5 @@
 import { exiftool, Tags, ExifDateTime, ExifDate } from 'exiftool-vendored'
-import calculateContentHash from './calculateContentHash'
+import generateId from './generateId'
 import Config from '../Config'
 import { promisify } from 'util'
 import { join } from 'path'
@@ -10,28 +10,28 @@ export * from './types'
 
 export const importPhoto = async (config: Config, relativePath: string): Promise<Photo> => {
   const fullPath = join(config.libraryBasePath, relativePath)
-  const contentHash = await calculateContentHash(fullPath)
+  const id = await generateId(fullPath)
 
-  return await loadOrWriteCache<Photo>(config.cacheBasePath, 'data', contentHash, 'json', async () => {
-    const metadata = await readExifMetadata(config, contentHash, relativePath)
+  return await loadOrWriteCache<Photo>(config.cacheBasePath, 'data', id, 'json', async () => {
+    const metadata = await readExifMetadata(config, id, relativePath)
     const mediaType = getMediaType(relativePath)
 
-    return { relativePath, contentHash, metadata, mediaType }
+    return { relativePath, id, metadata, mediaType }
   })
 }
 
 const promisifiedExec = promisify(exec)
 
-export const getThumbnail = async (config: Config, contentHash: string, relativePath: string): Promise<string> => {
+export const getThumbnail = async (config: Config, id: string, relativePath: string): Promise<string> => {
   return isVideo(relativePath)
-    ? getVideoThumbnail(config, contentHash, relativePath)
-    : getPhotoThumbnail(config, contentHash, relativePath)
+    ? getVideoThumbnail(config, id, relativePath)
+    : getPhotoThumbnail(config, id, relativePath)
 }
 
-const getPhotoThumbnail = async (config: Config, contentHash: string, relativePath: string): Promise<string> => {
+const getPhotoThumbnail = async (config: Config, id: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
-  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async (cachePath) => {
+  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', id, 'jpg', async (cachePath) => {
     try {
       await exiftool.extractThumbnail(fullPath, cachePath)
     } catch {
@@ -42,22 +42,22 @@ const getPhotoThumbnail = async (config: Config, contentHash: string, relativePa
   })
 }
 
-const getVideoThumbnail = async (config: Config, contentHash: string, relativePath: string): Promise<string> => {
+const getVideoThumbnail = async (config: Config, id: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
-  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', contentHash, 'jpg', async (cachePath) => {
+  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', id, 'jpg', async (cachePath) => {
     await promisifiedExec(
       `ffmpeg -ss 1 -i "${fullPath}" -vf "thumbnail,scale=200:200,crop=200:200" -vframes 1 "${cachePath}"`,
     )
   })
 }
 
-export const getPreview = async (config: Config, contentHash: string, relativePath: string): Promise<string> => {
+export const getPreview = async (config: Config, id: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
   if (!isRaw(relativePath) || isVideo(relativePath)) return fullPath
 
-  return await ensureCachePathExists(config.cacheBasePath, '1080p', contentHash, 'jpg', async (cachePath) => {
+  return await ensureCachePathExists(config.cacheBasePath, '1080p', id, 'jpg', async (cachePath) => {
     try {
       try {
         await exiftool.extractJpgFromRaw(fullPath, cachePath)
@@ -76,7 +76,7 @@ const isRaw = (filename: string) => !filename.match(/\.(jpg|jpeg|png)$/i)
 
 const isVideo = (filename: string) => !!filename.match(/\.(mp4|avi|mpg|mov)$/i)
 
-const readExifMetadata = async (config: Config, contentHash: string, relativePath: string) => {
+const readExifMetadata = async (config: Config, id: string, relativePath: string) => {
   const fullPath = join(config.libraryBasePath, relativePath)
   const exif: Tags = await exiftool.read(fullPath)
 

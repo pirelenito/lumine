@@ -9,12 +9,12 @@ export default async (config: Config) => {
 
   app.get('/api/photos', (req, res) => res.json(library.getPhotos()))
 
-  app.get('/api/photos/:id', (req, res) => res.json(library.getPhotoByContentHash(req.params.id)))
+  app.get('/api/photos/:id', (req, res) => res.json(library.getPhotoByid(req.params.id)))
 
-  app.get('/api/thumbnail/:contentHash', async (req, res) => {
+  app.get('/api/thumbnail/:id', async (req, res) => {
     try {
-      const file = await library.getThumbnail(req.params.contentHash)
-      if (!file) res.sendStatus(404)
+      const file = await library.getThumbnail(req.params.id)
+      if (!file) return res.sendStatus(404)
 
       res.sendFile(file)
     } catch (error) {
@@ -23,10 +23,10 @@ export default async (config: Config) => {
     }
   })
 
-  app.get('/api/preview/:contentHash', async (req, res) => {
+  app.get('/api/preview/:id', async (req, res) => {
     try {
-      const file = await library.getPreview(req.params.contentHash)
-      if (!file) res.sendStatus(404)
+      const file = await library.getPreview(req.params.id)
+      if (!file) return res.sendStatus(404)
 
       res.sendFile(file)
     } catch (error) {

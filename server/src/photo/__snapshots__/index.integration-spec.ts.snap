@@ -2,7 +2,7 @@
 
 exports[`loads canonS2is.jpg 1`] = `
 Object {
-  "contentHash": "13a4a500001674cc286200000",
+  "id": "13a4a500001674cc286200000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": "Canon PowerShot S2 IS",
@@ -15,7 +15,7 @@ Object {
 
 exports[`loads iphone3gs.JPG 1`] = `
 Object {
-  "contentHash": "12898800001674cc286200000",
+  "id": "12898800001674cc286200000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": "iPhone 3GS",
@@ -32,7 +32,7 @@ Object {
 
 exports[`loads iphone5s.jpg 1`] = `
 Object {
-  "contentHash": "140a9100001674cc286200000",
+  "id": "140a9100001674cc286200000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": "iPhone 5s",
@@ -49,7 +49,7 @@ Object {
 
 exports[`loads iphone6.jpg 1`] = `
 Object {
-  "contentHash": "f2764000001674cc286200000",
+  "id": "f2764000001674cc286200000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": "iPhone 6",
@@ -62,7 +62,7 @@ Object {
 
 exports[`loads nokia5.jpg 1`] = `
 Object {
-  "contentHash": "22b05500001674cc286200000",
+  "id": "22b05500001674cc286200000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": "Nokia 5",
@@ -75,7 +75,7 @@ Object {
 
 exports[`loads nokia7.mp4 1`] = `
 Object {
-  "contentHash": "11ef51200016b846409880000",
+  "id": "11ef51200016b846409880000",
   "mediaType": "video",
   "metadata": Object {
     "cameraModel": undefined,
@@ -92,7 +92,7 @@ Object {
 
 exports[`loads nokia620.jpg 1`] = `
 Object {
-  "contentHash": "15f05d00001674cc286200000",
+  "id": "15f05d00001674cc286200000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": "Lumia 620",
@@ -109,7 +109,7 @@ Object {
 
 exports[`loads nokia5130.jpg 1`] = `
 Object {
-  "contentHash": "483c8000001674cc286200000",
+  "id": "483c8000001674cc286200000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": "5130c-2",
@@ -122,7 +122,7 @@ Object {
 
 exports[`loads nokia5200.jpg 1`] = `
 Object {
-  "contentHash": "bbc20000001676e8f30280000",
+  "id": "bbc20000001676e8f30280000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": 5200,
@@ -135,7 +135,7 @@ Object {
 
 exports[`loads s300d.jpg 1`] = `
 Object {
-  "contentHash": "a4c2d00000116f42673c80000",
+  "id": "a4c2d00000116f42673c80000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": "u10D,S300D,u300D",
@@ -148,7 +148,7 @@ Object {
 
 exports[`loads sonyA6000.arw 1`] = `
 Object {
-  "contentHash": "17f800000016c7b4fad380000",
+  "id": "17f800000016c7b4fad380000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": "ILCE-6000",
@@ -161,7 +161,7 @@ Object {
 
 exports[`loads sonyNex3.arw 1`] = `
 Object {
-  "contentHash": "10380000001674cc286200000",
+  "id": "10380000001674cc286200000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": "NEX-3N",
@@ -174,7 +174,7 @@ Object {
 
 exports[`loads sonyNex3.jpg 1`] = `
 Object {
-  "contentHash": "58000000001674cc286200000",
+  "id": "58000000001674cc286200000",
   "mediaType": "photo",
   "metadata": Object {
     "cameraModel": "NEX-3N",
@@ -187,7 +187,7 @@ Object {
 
 exports[`loads sonya6000.MP4 1`] = `
 Object {
-  "contentHash": "70e33e000016985ba70300000",
+  "id": "70e33e000016985ba70300000",
   "mediaType": "video",
   "metadata": Object {
     "cameraModel": undefined,

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 
 export interface Photo {
   relativePath: string
-  contentHash: string
+  id: string
   metadata: Metadata
   mediaType: 'photo' | 'video'
 }
