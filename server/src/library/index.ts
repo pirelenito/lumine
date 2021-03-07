@@ -39,7 +39,6 @@ class Library {
 
     this.photos = photos.sort((a, b) => b.metadata.createdAt - a.metadata.createdAt)
     this.videos = this.photos.filter((photo) => photo.mediaType === 'video')
-    console.log(this.videos)
   }
 
   async getThumbnail(id: string) {
