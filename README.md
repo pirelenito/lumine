@@ -2,6 +2,8 @@
 
 A stateless photo library service to run on your NAS.
 
+![Screenshot](screenshot.png)
+
 Still very much a work-in-progress 🙈.
 
 ## Development
