@@ -49,6 +49,7 @@ export default ({ match }: RouteChildrenProps<Params>) => {
 
   const columnCount = Math.floor(width / 200)
   const rowCount = Math.ceil(photos.length / columnCount)
+  const overscanRowCount = Math.round((height / 200) * 2)
 
   return (
     <>
@@ -60,8 +61,9 @@ export default ({ match }: RouteChildrenProps<Params>) => {
         rowCount={rowCount}
         rowHeight={200}
         width={width}
-        overscanRowCount={4}
+        overscanRowCount={overscanRowCount}
         innerRef={innerRef}
+        itemKey={({ columnIndex, rowIndex }) => photos[columnCount * rowIndex + columnIndex].id}
         style={{ display: 'flex', justifyContent: 'center' }}
       >
         {Cell}
