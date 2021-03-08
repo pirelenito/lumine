@@ -76,10 +76,8 @@ export default () => {
       >
         {Cell}
       </Grid>
-      {selectedPhoto && selectedPhotoIndex ? (
-        <MediaDetail index={selectedPhotoIndex} id={selectedPhoto.id} mediaType={selectedPhoto.mediaType} />
-      ) : undefined}
-      <NavBar />
+      {selectedPhoto ? <MediaDetail id={selectedPhoto.id} mediaType={selectedPhoto.mediaType} /> : undefined}
+      <NavBar selectedPhotoIndex={selectedPhotoIndex} />
     </>
   )
 }
@@ -87,23 +85,10 @@ export default () => {
 interface MediaDetailProps {
   id: string
   mediaType: string
-  index: number
 }
 
-function MediaDetail({ id, mediaType, index }: MediaDetailProps) {
+function MediaDetail({ id, mediaType }: MediaDetailProps) {
   const src = `/api/preview/${id}`
-  const previousRef = useRef<HTMLAnchorElement>(null)
-  const nextRef = useRef<HTMLAnchorElement>(null)
-
-  useEffect(() => {
-    const handler = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowLeft' && previousRef.current) previousRef.current.click()
-      if (event.key === 'ArrowRight' && nextRef.current) nextRef.current.click()
-    }
-
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  })
 
   return (
     <div
@@ -123,33 +108,26 @@ function MediaDetail({ id, mediaType, index }: MediaDetailProps) {
       ) : (
         <video style={{ height: '100vh' }} src={src} controls loop autoPlay />
       )}
-      <Link
-        innerRef={previousRef}
-        to={`?index=${index - 1}`}
-        style={{ position: 'absolute', left: 0, top: '50%', marginTop: '-32px' }}
-      >
-        <svg width="32" height="64" viewBox="0 0 32 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cy="32" r="32" fill="#0F1115" fill-opacity="0.8" />
-          <path d="M19 20L7 32.5L19 45" stroke="#ADADAD" stroke-width="4" />
-        </svg>
-      </Link>
-      <Link
-        innerRef={nextRef}
-        to={`?index=${index + 1}`}
-        style={{ position: 'absolute', right: 0, top: '50%', marginTop: '-32px' }}
-      >
-        <svg width="32" height="64" viewBox="0 0 32 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="32" cy="32" r="32" transform="rotate(-180 32 32)" fill="#0F1115" fill-opacity="0.8" />
-          <path d="M13 44L25 31.5L13 19" stroke="#ADADAD" stroke-width="4" />
-        </svg>
-      </Link>
     </div>
   )
 }
 
 const NAV_BAR_HEIGHT = 36
 
-function NavBar() {
+function NavBar({ selectedPhotoIndex }: { selectedPhotoIndex: number | undefined }) {
+  const previousRef = useRef<HTMLAnchorElement>(null)
+  const nextRef = useRef<HTMLAnchorElement>(null)
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft' && previousRef.current) previousRef.current.click()
+      if (event.key === 'ArrowRight' && nextRef.current) nextRef.current.click()
+    }
+
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  })
+
   return (
     <div
       style={{
@@ -166,6 +144,35 @@ function NavBar() {
     >
       <NavBarLink href="/photos" label="Photos" />
       <NavBarLink href="/videos" label="Videos" />
+
+      {selectedPhotoIndex && (
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <Link
+            innerRef={previousRef}
+            to={`?index=${selectedPhotoIndex - 1}`}
+            style={{ paddingRight: '8px', height: 23 }}
+          >
+            <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M22 11.5C22 17.299 17.299 22 11.5 22C5.70101 22 1 17.299 1 11.5C1 5.70101 5.70101 1 11.5 1C17.299 1 22 5.70101 22 11.5Z"
+                stroke="#ADADAD"
+                stroke-width="2"
+              />
+              <path d="M14 6L8 11.5L14 17" stroke="#ADADAD" stroke-width="2" />
+            </svg>
+          </Link>
+          <Link innerRef={nextRef} to={`?index=${selectedPhotoIndex + 1}`} style={{ paddingRight: '8px', height: 23 }}>
+            <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M0.999997 11.5C0.999998 5.70101 5.70101 0.999998 11.5 0.999999C17.299 1 22 5.70101 22 11.5C22 17.299 17.299 22 11.5 22C5.70101 22 0.999997 17.299 0.999997 11.5Z"
+                stroke="#ADADAD"
+                stroke-width="2"
+              />
+              <path d="M9 17L15 11.5L9 6" stroke="#ADADAD" stroke-width="2" />
+            </svg>
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
