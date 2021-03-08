@@ -39,6 +39,18 @@ export const startServer = async (config: Config) => {
     }
   })
 
+  app.get('/api/original/:id', async (req, res) => {
+    try {
+      const file = await library.getOriginal(req.params.id)
+      if (!file) return res.sendStatus(404)
+
+      res.download(file)
+    } catch (error) {
+      res.status(500)
+      res.send(error)
+    }
+  })
+
   app.use(express.static('/usr/src/app/client/build'))
 
   app.get('/*', (req, res, next) => {

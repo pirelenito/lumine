@@ -62,6 +62,13 @@ export class Library {
     return getPreview(this.config, photo.id, photo.relativePath)
   }
 
+  async getOriginal(id: string) {
+    const photo = this.getPhotoByid(id)
+    if (!photo) return
+
+    return path.join(this.config.libraryBasePath, photo.relativePath)
+  }
+
   getPhotos() {
     return this.photos
   }
