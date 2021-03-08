@@ -71,7 +71,6 @@ export default () => {
         width={width}
         overscanRowCount={overscanRowCount}
         innerRef={innerRef}
-        itemKey={({ columnIndex, rowIndex }) => photos[columnCount * rowIndex + columnIndex].id}
         style={{ display: 'flex', justifyContent: 'center' }}
       >
         {Cell}
