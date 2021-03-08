@@ -216,7 +216,7 @@ function NavBar({ selectedPhotoIndex, scrollDate }: { selectedPhotoIndex: number
 
 function NavBarLink({ href, label }: { href: string; label: string }) {
   return (
-    <Link style={{ padding: '0px 8px', textDecoration: 'none', color: '#adadad' }} to={href}>
+    <Link style={{ paddingLeft: '16px', textDecoration: 'none', color: '#adadad' }} to={href}>
       {label}
     </Link>
   )
