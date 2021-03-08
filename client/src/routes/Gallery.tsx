@@ -1,16 +1,18 @@
 import React, { CSSProperties, useState, useEffect, useRef } from 'react'
 import { FixedSizeGrid as Grid } from 'react-window'
-import { Link } from 'react-router-dom'
-import { RouteChildrenProps } from 'react-router'
+import { Link, useRouteMatch, useLocation } from 'react-router-dom'
 import Spinner from './Spinner'
 
 interface Params {
-  mediaType: string
+  mediaType: 'photos' | 'videos'
 }
 
-export default ({ match }: RouteChildrenProps<Params>) => {
-  if (!match) return null
+function useQuery() {
+  return new URLSearchParams(useLocation().search)
+}
 
+export default () => {
+  const match = useRouteMatch<Params>()
   const innerRef = useRef<HTMLDivElement>(null)
 
   /**
@@ -29,6 +31,10 @@ export default ({ match }: RouteChildrenProps<Params>) => {
   const [width, setWidth] = useState(window.innerWidth)
   const [height, setHeight] = useState(window.innerHeight)
 
+  const query = useQuery()
+  const selectedPhotoIndex = query.get('index') ? parseInt(query.get('index') || '', 10) : undefined
+  const selectedPhoto = selectedPhotoIndex ? photos[selectedPhotoIndex] : undefined
+
   useEffect(() => {
     const handleResize = () => {
       setHeight(window.innerHeight)
@@ -40,7 +46,7 @@ export default ({ match }: RouteChildrenProps<Params>) => {
   })
 
   useEffect(() => {
-    fetch(`/api/${mediaType === 'video' ? 'videos' : 'photos'}`)
+    fetch(`/api/${mediaType === 'videos' ? 'videos' : 'photos'}`)
       .then(function (response) {
         return response.json()
       })
@@ -50,6 +56,8 @@ export default ({ match }: RouteChildrenProps<Params>) => {
   const columnCount = Math.floor(width / 200)
   const rowCount = Math.ceil(photos.length / columnCount)
   const overscanRowCount = Math.round((height / 200) * 2)
+
+  if (!match) return null
 
   return (
     <>
@@ -68,8 +76,74 @@ export default ({ match }: RouteChildrenProps<Params>) => {
       >
         {Cell}
       </Grid>
+      {selectedPhoto && selectedPhotoIndex ? (
+        <MediaDetail index={selectedPhotoIndex} id={selectedPhoto.id} mediaType={selectedPhoto.mediaType} />
+      ) : undefined}
       <NavBar />
     </>
+  )
+}
+
+interface MediaDetailProps {
+  id: string
+  mediaType: string
+  index: number
+}
+
+function MediaDetail({ id, mediaType, index }: MediaDetailProps) {
+  const src = `/api/preview/${id}`
+  const previousRef = useRef<HTMLAnchorElement>(null)
+  const nextRef = useRef<HTMLAnchorElement>(null)
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft' && previousRef.current) previousRef.current.click()
+      if (event.key === 'ArrowRight' && nextRef.current) nextRef.current.click()
+    }
+
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  })
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        background: '#2c313c',
+      }}
+    >
+      {mediaType === 'photo' ? (
+        <img style={{ height: '100vh' }} src={src} />
+      ) : (
+        <video style={{ height: '100vh' }} src={src} controls loop autoPlay />
+      )}
+      <Link
+        innerRef={previousRef}
+        to={`?index=${index - 1}`}
+        style={{ position: 'absolute', left: 0, top: '50%', marginTop: '-32px' }}
+      >
+        <svg width="32" height="64" viewBox="0 0 32 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cy="32" r="32" fill="#0F1115" fill-opacity="0.8" />
+          <path d="M19 20L7 32.5L19 45" stroke="#ADADAD" stroke-width="4" />
+        </svg>
+      </Link>
+      <Link
+        innerRef={nextRef}
+        to={`?index=${index + 1}`}
+        style={{ position: 'absolute', right: 0, top: '50%', marginTop: '-32px' }}
+      >
+        <svg width="32" height="64" viewBox="0 0 32 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="32" transform="rotate(-180 32 32)" fill="#0F1115" fill-opacity="0.8" />
+          <path d="M13 44L25 31.5L13 19" stroke="#ADADAD" stroke-width="4" />
+        </svg>
+      </Link>
+    </div>
   )
 }
 
@@ -90,8 +164,8 @@ function NavBar() {
         alignItems: 'center',
       }}
     >
-      <NavBarLink href="/" label="Photos" />
-      <NavBarLink href="/video" label="Videos" />
+      <NavBarLink href="/photos" label="Photos" />
+      <NavBarLink href="/videos" label="Videos" />
     </div>
   )
 }
@@ -134,7 +208,8 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
   const [thumbnail, setThumbnail] = useState<string | null>(null)
   const [loaded, setLoaded] = useState<boolean>(false)
   const { photos, columnCount } = data
-  const photo = photos[columnCount * rowIndex + columnIndex]
+  const index = columnCount * rowIndex + columnIndex
+  const photo = photos[index]
 
   useEffect(() => {
     if (!photo) return
@@ -150,7 +225,7 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
 
   return (
     <div style={{ ...style, top: parseInt((style.top as string) || '0', 10) + NAV_BAR_HEIGHT + 2 }}>
-      <Link to={`/${photo.mediaType}/${photo.id}`}>
+      <Link to={`?index=${index}`}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           {!loaded && <Spinner />}
           {thumbnail && (
