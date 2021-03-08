@@ -28,7 +28,7 @@ export default function MediaDetail({ match }: RouteChildrenProps<Params>) {
       {mediaType === 'photo' ? (
         <img style={{ height: '100vh' }} src={src} />
       ) : (
-        <video style={{ height: '100vh' }} src={src} controls loop />
+        <video style={{ height: '100vh' }} src={src} controls loop autoPlay />
       )}
     </div>
   )
