@@ -33,7 +33,7 @@ export default () => {
 
   const query = useQuery()
   const selectedPhotoIndex = query.get('index') ? parseInt(query.get('index') || '', 10) : undefined
-  const selectedPhoto = selectedPhotoIndex ? photos[selectedPhotoIndex] : undefined
+  const selectedPhoto = selectedPhotoIndex !== undefined ? photos[selectedPhotoIndex] : undefined
 
   const [scrollDate, setScrollDate] = useState<number | undefined>()
 
@@ -172,7 +172,7 @@ function NavBar({ selectedPhotoIndex, scrollDate }: { selectedPhotoIndex: number
 
       {scrollDate && new Date(scrollDate).toLocaleDateString()}
 
-      {selectedPhotoIndex && (
+      {selectedPhotoIndex !== undefined && (
         <div
           style={{
             position: 'absolute',
