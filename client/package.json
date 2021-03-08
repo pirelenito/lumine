@@ -20,7 +20,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://192.168.50.67:80",
+  "proxy": "http://server:80",
   "browserslist": [
     ">0.2%",
     "not dead",
@@ -32,7 +32,7 @@
     "@types/node": "^10.12.10",
     "@types/react": "^17.0.1",
     "@types/react-dom": "17.0.1",
-    "@types/react-router-dom": "^5.2.0",
+    "@types/react-router-dom": "^5.1.7",
     "@types/react-window": "^1.8.2"
   }
 }
