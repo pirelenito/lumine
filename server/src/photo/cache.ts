@@ -1,41 +1,53 @@
 import { join } from 'path'
+import { TaskQueue } from 'cwait'
+import os from 'os'
 import { ensureDir, readFile, writeFile, pathExists } from 'fs-extra'
 
-export async function ensureCachePathExists(
-  cacheFolder: string,
-  namespace: string,
-  id: string,
-  fileExtension: string,
-  operation: Operation<void>,
-): Promise<string> {
-  const resourcePath = await getResourcePath(cacheFolder, namespace, id, fileExtension)
-  if (!(await pathExists(resourcePath))) await operation(resourcePath)
-  return resourcePath
+/**
+ * Given the goal is wrap costly operations, we throttle their execution while leaving always two CPU cores free.
+ */
+const queue = new TaskQueue(Promise, os.cpus().length - 2)
+
+interface CacheInfo {
+  cacheFolder: string
+  namespace: string
+  id: string
+  fileExtension: string
 }
+
+/**
+ * Given an operation that populates the cache path, it will run the operation if a cache is not available.
+ */
+export const ensureCachePathExists = queue.wrap(
+  async ({ cacheFolder, namespace, id, fileExtension }: CacheInfo, operation: Operation<void>): Promise<string> => {
+    const resourcePath = await getResourcePath(cacheFolder, namespace, id, fileExtension)
+    if (!(await pathExists(resourcePath))) await operation(resourcePath)
+    return resourcePath
+  },
+)
 
 interface Operation<T> {
   (filePath: string): Promise<T>
 }
 
-export async function loadOrWriteCache<T>(
-  cacheFolder: string,
-  namespace: string,
-  id: string,
-  fileExtension: string,
-  operation: Operation<T>,
-): Promise<T> {
-  const resourcePath = await getResourcePath(cacheFolder, namespace, id, fileExtension)
+/**
+ * Given an operation that returns the content of a cache, it will run the operation if the cache is not available
+ */
+export const loadOrWriteCache = queue.wrap(
+  async <T>({ cacheFolder, namespace, id, fileExtension }: CacheInfo, operation: Operation<T>): Promise<T> => {
+    const resourcePath = await getResourcePath(cacheFolder, namespace, id, fileExtension)
 
-  try {
-    const buffer = await readFile(resourcePath)
-    const object = JSON.parse(buffer.toString())
-    return object
-  } catch (e) {
-    const data = await operation(resourcePath)
-    await writeFile(resourcePath, JSON.stringify(data))
-    return data as T
-  }
-}
+    try {
+      const buffer = await readFile(resourcePath)
+      const object = JSON.parse(buffer.toString())
+      return object
+    } catch (e) {
+      const data = await operation(resourcePath)
+      await writeFile(resourcePath, JSON.stringify(data))
+      return data as T
+    }
+  },
+)
 
 const getResourcePath = async (cacheFolder: string, namespace: string, id: string, fileExtension: string) => {
   const dir = join(cacheFolder, namespace, id.slice(0, 2))

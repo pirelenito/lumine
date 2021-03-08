@@ -12,12 +12,15 @@ export const importPhoto = async (config: Config, relativePath: string): Promise
   const fullPath = join(config.libraryBasePath, relativePath)
   const id = await generateId(fullPath)
 
-  return await loadOrWriteCache<Photo>(config.cacheBasePath, 'data', id, 'json', async () => {
-    const metadata = await readExifMetadata(config, id, relativePath)
-    const mediaType = getMediaType(relativePath)
+  return await loadOrWriteCache<Photo>(
+    { cacheFolder: config.cacheBasePath, namespace: 'data', id, fileExtension: 'json' },
+    async () => {
+      const metadata = await readExifMetadata(config, id, relativePath)
+      const mediaType = getMediaType(relativePath)
 
-    return { relativePath, id, metadata, mediaType }
-  })
+      return { relativePath, id, metadata, mediaType }
+    },
+  )
 }
 
 const promisifiedExec = promisify(exec)
@@ -31,25 +34,31 @@ export const getThumbnail = async (config: Config, id: string, relativePath: str
 const getPhotoThumbnail = async (config: Config, id: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
-  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', id, 'jpg', async (cachePath) => {
-    try {
-      await exiftool.extractThumbnail(fullPath, cachePath)
-    } catch {
-      await promisifiedExec(
-        `magick convert -size 200x200 -thumbnail 200x200^ -gravity center -extent 200x200 +profile "*" "${fullPath}" "${cachePath}"`,
-      )
-    }
-  })
+  return await ensureCachePathExists(
+    { cacheFolder: config.cacheBasePath, namespace: 'thumbnail', id, fileExtension: 'jpg' },
+    async (cachePath) => {
+      try {
+        await exiftool.extractThumbnail(fullPath, cachePath)
+      } catch {
+        await promisifiedExec(
+          `magick convert -size 200x200 -thumbnail 200x200^ -gravity center -extent 200x200 +profile "*" "${fullPath}" "${cachePath}"`,
+        )
+      }
+    },
+  )
 }
 
 const getVideoThumbnail = async (config: Config, id: string, relativePath: string): Promise<string> => {
   const fullPath = join(config.libraryBasePath, relativePath)
 
-  return await ensureCachePathExists(config.cacheBasePath, 'thumbnail', id, 'jpg', async (cachePath) => {
-    await promisifiedExec(
-      `ffmpeg -ss 00:00:00 -i "${fullPath}" -vf "thumbnail,scale=200:200,crop=200:200" -frames:v 1 "${cachePath}"`,
-    )
-  })
+  return await ensureCachePathExists(
+    { cacheFolder: config.cacheBasePath, namespace: 'thumbnail', id, fileExtension: 'jpg' },
+    async (cachePath) => {
+      await promisifiedExec(
+        `ffmpeg -ss 00:00:00 -i "${fullPath}" -vf "thumbnail,scale=200:200,crop=200:200" -frames:v 1 "${cachePath}"`,
+      )
+    },
+  )
 }
 
 export const getPreview = async (config: Config, id: string, relativePath: string): Promise<string> => {
@@ -57,17 +66,20 @@ export const getPreview = async (config: Config, id: string, relativePath: strin
 
   if (!isRaw(relativePath) || isVideo(relativePath)) return fullPath
 
-  return await ensureCachePathExists(config.cacheBasePath, '1080p', id, 'jpg', async (cachePath) => {
-    try {
+  return await ensureCachePathExists(
+    { cacheFolder: config.cacheBasePath, namespace: 'preview', id, fileExtension: 'jpg' },
+    async (cachePath) => {
       try {
-        await exiftool.extractJpgFromRaw(fullPath, cachePath)
+        try {
+          await exiftool.extractJpgFromRaw(fullPath, cachePath)
+        } catch {
+          await exiftool.extractPreview(fullPath, cachePath)
+        }
       } catch {
-        await exiftool.extractPreview(fullPath, cachePath)
+        await promisifiedExec(`magick convert -resize 1920x1080\\> "${fullPath}" "${cachePath}"`)
       }
-    } catch {
-      await promisifiedExec(`magick convert -resize 1920x1080\\> "${fullPath}" "${cachePath}"`)
-    }
-  })
+    },
+  )
 }
 
 export const getMediaType = (filename: string) => (isVideo(filename) ? 'video' : 'photo')

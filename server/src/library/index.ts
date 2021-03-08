@@ -1,17 +1,10 @@
 import Config from '../Config'
-import os from 'os'
 import path from 'path'
 import glob from 'glob'
 import { Photo, importPhoto, getThumbnail, getPreview } from '../photo'
 import { promisify } from 'util'
-import { TaskQueue } from 'cwait'
 
 const globPromisified = promisify(glob)
-
-const queue = new TaskQueue(Promise, os.cpus().length - 1)
-const getThumbnailThrottled = queue.wrap(getThumbnail)
-const getPreviewThrottled = queue.wrap(getPreview)
-const importPhotoThrottled = queue.wrap(importPhoto)
 
 interface ScanningInfo {
   total: number
@@ -41,7 +34,7 @@ export class Library {
 
     const photos = await Promise.all(
       files.map(async (filePath) => {
-        const photo = await importPhotoThrottled(this.config, filePath)
+        const photo = await importPhoto(this.config, filePath)
 
         // increase the progress
         this.scanningInfo.ready += 1
@@ -59,14 +52,14 @@ export class Library {
     const photo = this.getPhotoByid(id)
     if (!photo) return
 
-    return getThumbnailThrottled(this.config, photo.id, photo.relativePath)
+    return getThumbnail(this.config, photo.id, photo.relativePath)
   }
 
   async getPreview(id: string) {
     const photo = this.getPhotoByid(id)
     if (!photo) return
 
-    return getPreviewThrottled(this.config, photo.id, photo.relativePath)
+    return getPreview(this.config, photo.id, photo.relativePath)
   }
 
   getPhotos() {
