@@ -35,6 +35,8 @@ export default () => {
   const selectedPhotoIndex = query.get('index') ? parseInt(query.get('index') || '', 10) : undefined
   const selectedPhoto = selectedPhotoIndex ? photos[selectedPhotoIndex] : undefined
 
+  const [scrollDate, setScrollDate] = useState<number | undefined>()
+
   useEffect(() => {
     const handleResize = () => {
       setHeight(window.innerHeight)
@@ -62,6 +64,14 @@ export default () => {
   return (
     <>
       <Grid
+        onItemsRendered={({ visibleRowStartIndex }) => {
+          const index = columnCount * visibleRowStartIndex
+          const photo = photos[index]
+
+          if (photo) {
+            setScrollDate(photo.metadata.createdAt)
+          }
+        }}
         itemData={{ columnCount, photos }}
         columnCount={columnCount}
         columnWidth={202}
@@ -76,7 +86,10 @@ export default () => {
         {Cell}
       </Grid>
       {selectedPhoto ? <MediaDetail id={selectedPhoto.id} mediaType={selectedPhoto.mediaType} /> : undefined}
-      <NavBar selectedPhotoIndex={selectedPhotoIndex} />
+      <NavBar
+        selectedPhotoIndex={selectedPhotoIndex}
+        scrollDate={selectedPhoto ? selectedPhoto.metadata.createdAt : scrollDate}
+      />
     </>
   )
 }
@@ -113,7 +126,7 @@ function MediaDetail({ id, mediaType }: MediaDetailProps) {
 
 const NAV_BAR_HEIGHT = 36
 
-function NavBar({ selectedPhotoIndex }: { selectedPhotoIndex: number | undefined }) {
+function NavBar({ selectedPhotoIndex, scrollDate }: { selectedPhotoIndex: number | undefined; scrollDate?: number }) {
   const previousRef = useRef<HTMLAnchorElement>(null)
   const nextRef = useRef<HTMLAnchorElement>(null)
 
@@ -130,7 +143,6 @@ function NavBar({ selectedPhotoIndex }: { selectedPhotoIndex: number | undefined
   return (
     <div
       style={{
-        paddingLeft: 8,
         position: 'absolute',
         top: 0,
         left: 0,
@@ -139,13 +151,39 @@ function NavBar({ selectedPhotoIndex }: { selectedPhotoIndex: number | undefined
         background: 'rgb(15 17 21 / 80%)',
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'center',
+        color: '#adadad',
       }}
     >
-      <NavBarLink href="/photos" label="Photos" />
-      <NavBarLink href="/videos" label="Videos" />
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          bottom: 0,
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+        }}
+      >
+        <NavBarLink href="/photos" label="Photos" />
+        <NavBarLink href="/videos" label="Videos" />
+      </div>
+
+      {scrollDate && new Date(scrollDate).toLocaleDateString()}
 
       {selectedPhotoIndex && (
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
           <Link
             innerRef={previousRef}
             to={`?index=${selectedPhotoIndex - 1}`}
@@ -256,33 +294,15 @@ const Cell = ({ columnIndex, rowIndex, data, style }: CellProps) => {
             style={{ position: 'absolute', top: 1, left: 1, width: 200, height: 200 }}
           />
         )}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 1,
-            right: 1,
-            left: '50%',
-            textAlign: 'right',
-            color: '#adadad',
-            background: 'rgba(0,0,0,0.6)',
-            fontWeight: 'bold',
-            fontSize: 12,
-            paddingTop: 2,
-            paddingBottom: 2,
-            paddingRight: 4,
-            paddingLeft: 4,
-          }}
-        >
-          {photo.mediaType === 'video' ? (
-            <div style={{ position: 'absolute', left: 4, top: 3 }}>
-              <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="10" cy="10" r="9" stroke="#E3E3E3" strokeWidth="2" />
-                <path d="M15 10L7.5 14.3301L7.5 5.66987L15 10Z" fill="#E3E3E3" />
-              </svg>
-            </div>
-          ) : null}
-          {new Date(photo.metadata.createdAt).toLocaleDateString()}
-        </div>
+
+        {photo.mediaType === 'video' ? (
+          <div style={{ position: 'absolute', right: 5, bottom: 2 }}>
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="10" r="9" stroke="#E3E3E3" strokeWidth="2" />
+              <path d="M15 10L7.5 14.3301L7.5 5.66987L15 10Z" fill="#E3E3E3" />
+            </svg>
+          </div>
+        ) : null}
       </Link>
     </div>
   )
