@@ -35,7 +35,11 @@ export default ({ children }: { children: ReactNode }) => {
   if (loading)
     return (
       <div style={{ alignSelf: 'center', color: 'white', textAlign: 'center', flex: 1 }}>
-        <div>📷 Scanning photos: {Math.floor((scanningInfo.ready / scanningInfo.total) * 100)}% completed.</div>
+        {scanningInfo.total === 0 ? (
+          <div>📂 No photos found. Check folder and restart the server.</div>
+        ) : (
+          <div>📷 Scanning photos: {Math.floor((scanningInfo.ready / scanningInfo.total) * 100)}% completed.</div>
+        )}
         <Spinner />
       </div>
     )
