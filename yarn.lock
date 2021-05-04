@@ -2167,10 +2167,10 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
-batch-cluster@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/batch-cluster/-/batch-cluster-6.0.1.tgz#006676787192f0cae125b3727086f16377084b51"
-  integrity sha512-DwxBPQ+3gvijlM8OBH0KF4ef4kBH5ZMu2/Cj5s6extxy0PrEJvJSpyTRWprRrs/K9SMM7gI0NFSa6eiMoZgmiw==
+batch-cluster@^6.0.2:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/batch-cluster/-/batch-cluster-6.1.0.tgz#8931aa3ca0ba086eb27b9f8fa49cdf9d641b77f8"
+  integrity sha512-UTEJckl8xanAEW+4DMweKSZPgHzquF5kNU1nULSe2bFI4Z3nW54562aSEIW3POBTtCHWGxUCnk1Mx14PruhAWg==
 
 batch@0.6.1:
   version "0.6.1"
@@ -4133,28 +4133,28 @@ execa@^1.0.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
-exiftool-vendored.exe@^12.19.0:
-  version "12.19.0"
-  resolved "https://registry.yarnpkg.com/exiftool-vendored.exe/-/exiftool-vendored.exe-12.19.0.tgz#37b632f830aa2f42f3dde4c6d79fe7b44d9fb241"
-  integrity sha512-TZmZxNBv71dKezoafLZQo9DhD7lO3s9R7VX/b5AKBI2aLVJ4SIJQ/bSbk+0megzHvQZse0kftn/+anDSsgqWFg==
+exiftool-vendored.exe@^12.25.0:
+  version "12.25.0"
+  resolved "https://registry.yarnpkg.com/exiftool-vendored.exe/-/exiftool-vendored.exe-12.25.0.tgz#16a0ba3e689d253ed4dcee66059431a08ea2dc1d"
+  integrity sha512-8JfXFUex8D0HtHOKA89f45IEBS2ZBMc39DvvcbK4DcT6egNLZdwduO/asHPUS9epY6iIaN2AokAdyqn8bKpzWw==
 
-exiftool-vendored.pl@^12.19.0:
-  version "12.19.0"
-  resolved "https://registry.yarnpkg.com/exiftool-vendored.pl/-/exiftool-vendored.pl-12.19.0.tgz#98b0302efe1c0a0e3fce3b96df9493e241d2bd98"
-  integrity sha512-RYJ1cSzmBF1gEWS2HO0+nXW+QknVi9IUpciCRpnfzcGnRHiqLErmLLtxA6qCeL3MtlKy3ELduCWu0Phm9l6zGA==
+exiftool-vendored.pl@^12.25.0:
+  version "12.25.0"
+  resolved "https://registry.yarnpkg.com/exiftool-vendored.pl/-/exiftool-vendored.pl-12.25.0.tgz#1649508cb1b084af0cc1776158b748b89a9ce3ec"
+  integrity sha512-AqNy26adsMiNiMYxq+E4RhLNoOXo9Bc3Add/tBl8I2zkjOO/6/zGP5EiMvXFooZfb406mJ3b6sokBPxfRBA+jQ==
 
-exiftool-vendored@^14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/exiftool-vendored/-/exiftool-vendored-14.0.0.tgz#d62135fdb8a7bcab95e7a9c26d859b6ac00ed819"
-  integrity sha512-NGDAdETP02arl5GenL1+lPLiCjLvR2iD5yncD9vAdJXHOXDVrP8ENgj/H/q4VSCcuBAvQ68CP8wJUGStvdekYw==
+exiftool-vendored@^14.3.0:
+  version "14.3.0"
+  resolved "https://registry.yarnpkg.com/exiftool-vendored/-/exiftool-vendored-14.3.0.tgz#5f209d01de7c63ec8954f8ef49c6332791dffc2d"
+  integrity sha512-qEwyt6U4NFcFxdIOyv4mAx/JJkf7zrGr9enSanTn8NPvq1hwExfs3DP9LdVR0iNWTu4AopndGQCdsL0SqynJEg==
   dependencies:
-    batch-cluster "^6.0.1"
+    batch-cluster "^6.0.2"
     he "^1.2.0"
     luxon "^1.26.0"
     tz-lookup "^6.1.25"
   optionalDependencies:
-    exiftool-vendored.exe "^12.19.0"
-    exiftool-vendored.pl "^12.19.0"
+    exiftool-vendored.exe "^12.25.0"
+    exiftool-vendored.pl "^12.25.0"
 
 exit@^0.1.2:
   version "0.1.2"
